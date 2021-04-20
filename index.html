@@ -205,13 +205,23 @@
             .attr("cx", 0)
             .attr("cy", 0)
             .attr("fill", d => {
-              if (d.pvi > 0) {
-                return "red";
+              if(d.pvi<=-10) {
+                return "#B03A2E";
+              }else if(d.pvi<=-3) {
+                return "#E74C3C";
               }
-              if (d.pvi < 0) {
-                return "blue";
+              else if(d.pvi<0) {
+                return "#F5B7B1";
+              } else if(d.pvi>=17) {
+                return "#2874A6";
+              } else if(d.pvi>=11) {
+                return "#3498DB";
+              } else if(d.pvi>0) {
+                return "#AED6F1";
               }
-              return "grey";
+              else {
+                 return "#ABB2B9";
+              }
             })
         )
         .attr("transform", d => `translate(${codeScale(d.Code)},${pviScale(d.pvi)})`);
@@ -276,8 +286,17 @@
       const format = d3.format(',d');
       function updateMouseover(d) {
         textbox.html('');
+        let res = ""
+        if(d['pvi']>0){
+          res = "Republican"
+        } else if (d['pvi']<0){
+          res = "Democratic"
+        } else {
+          res = "Both"
+        }
         let stateName = `State: ${d['State']}`;
         let pvi = `Cook Partisan Voting Index: ${format(d['pvi'])}`
+        let voteres = "Voting Result: "+res;
         let totalD = `Total Doses Delivered: ${format(d['Total Doses Delivered'])}`
         let onepren = `Percent of Total Pop with at least One Dose by State of Residence: ${format(d['Percent of Total Pop with at least One Dose by State of Residence'])}`
         let twopren = `Percent of Total Pop Fully Vaccinated by State of Residence: ${format(d['Percent of Total Pop Fully Vaccinated by State of Residence'])}`
@@ -285,15 +304,17 @@
         frame.attr("width", maxWidth + 20);
 
         textbox.append("text").text(stateName)
-          .attr("x", 0).attr("y", 10);
+               .attr("x", 0).attr("y", 10);
         textbox.append("text").text(pvi)
-          .attr("x", 0).attr("y", 30);
+               .attr("x", 0).attr("y", 30);
+        textbox.append("text").text(voteres)
+               .attr("x", 0).attr("y", 50);
         textbox.append("text").text(totalD)
-          .attr("x", 0).attr("y", 50);
+               .attr("x", 0).attr("y", 70);
         textbox.append("text").text(onepren)
-          .attr("x", 0).attr("y", 70);
+               .attr("x", 0).attr("y", 90);
         textbox.append("text").text(twopren)
-          .attr("x", 0).attr("y", 90);
+               .attr("x", 0).attr("y", 110);
 
       }
       // Event handler 2: Update mouse over for map
