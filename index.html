@@ -90,8 +90,14 @@
   <br>
   <a href="#choropleth">Click here to see the content below.</a>
   <br>
-  <svg id="chart" height="500" width="1200" style="margin-top:20px">
+  <svg id="chart" height="500" width="1200" style="margin-top:20px; margin-bottom:20px">
   </svg><br>
+  <div id="pulldown-bar2">
+      <select id="options" style="width:400px;">
+          <option value="vaccineValue" selected>Precent of Total Pop with at least One Dose</option>
+          <option value="pviValue">Cook Partisan Voting Index</option>
+      </select>
+  </div>
   <svg id="choropleth" height="500" width="1200" style="background: #fff; margin-top:50px">
   </svg>
 
@@ -259,15 +265,8 @@
         percentData[d.State] = d['Percent of Total Pop with at least One Dose by State of Residence'];
       });
       console.log(pviData);
-      const minMax = d3.extent(stateIDs, d => pviData[d.name]);
-      console.log(minMax);
-      const vaccineExtent = d3.extent(stateIDs, d => percentData[d.name]);
-      console.log(vaccineExtent);
-      const colorScale = d3.scaleLinear().domain(vaccineExtent).range(["#c6b0e8", "#5017ad"]);
-      const colorScaleByParty = d3.scaleDiverging().domain([minMax[0], minMax[1] + 1]).range(["blue", "red"]);
-      // map.selectAll(".state").style("fill", d => colorScale(pviData[idToState[d.id]]));
-      state.style("fill", d => colorScaleByParty(pviData[idToState[d.id]]));
-      // state.selectAll("fill", d => (colorScale(percentData[idToState[d.id]])));
+      const colorScale = d3.scaleQuantile().domain(Object.values(percentData)).range(["#fff","#d1e8ed","#adc2da","#8879b3","#762b80"])
+      state.style("fill", d => colorScale(percentData[idToState[d.id]]));
 
       // Animation
       // Event handler 1: Update mouse over for lollipop chart
@@ -438,7 +437,7 @@
       });
 
 
-      // Dealing with options
+      // Dealing with sorting options for lollipop chart
       d3.select("#sort-select").on("change", function () {
 
         var option = d3.select(this).property("value")
@@ -558,6 +557,39 @@
             .attr("y1", dosesScale(avgDose)).attr("y2", d => dosesScale(d['Percent of Total Pop Fully Vaccinated by State of Residence']));
         }
 
+      })
+
+      // Dealing with sorting options for lollipop chart
+      d3.select("#options").on("change", function () {
+            var option = d3.select(this).property("value")
+            console.log(option)
+            var data;
+            if (option === "pviValue") {
+                state.style("fill", d => {
+                    let pviValue = pviData[idToState[d.id]];
+                    console.log(pviValue);
+                    if(pviValue<=-10) {
+                      return "#B03A2E";
+                    }else if(pviValue<=-3) {
+                      return "#E74C3C";
+                    }
+                    else if(pviValue<0) {
+                      return "#F5B7B1";
+                    } else if(pviValue>=17) {
+                      return "#2874A6";
+                    } else if(pviValue>=11) {
+                      return "#3498DB";
+                    } else if(pviValue>0) {
+                      return "#AED6F1";
+                    }
+                    else {
+                       return "#ABB2B9";
+                    }
+                })
+            }
+            else if (option === "vaccineValue") {
+                state.style("fill", d => colorScale(percentData[idToState[d.id]]));
+            }
       })
     }
 
