@@ -93,10 +93,10 @@
   <svg id="chart" height="500" width="1200" style="margin-top:20px; margin-bottom:20px">
   </svg><br>
   <div id="pulldown-bar2">
-      <select id="options" style="width:400px;">
-          <option value="vaccineValue" selected>Precent of Total Pop with at least One Dose</option>
-          <option value="pviValue">Cook Partisan Voting Index</option>
-      </select>
+    <select id="options" style="width:400px;">
+      <option value="vaccineValue" selected>Precent of Total Pop with at least One Dose</option>
+      <option value="pviValue">Cook Partisan Voting Index</option>
+    </select>
   </div>
   <svg id="choropleth" height="500" width="1200" style="background: #fff; margin-top:50px">
   </svg>
@@ -117,8 +117,8 @@
 
     // Setting for second chart
     const svg2 = d3.select("svg#choropleth");
-    const width2 = svg.attr("width");
-    const height2 = svg.attr("height");
+    const width2 = svg2.attr("width");
+    const height2 = svg2.attr("height");
     const margin2 = { top: 20, right: 20, bottom: 20, left: 10 };
     const mapWidth = width2 - margin2.left - margin2.right;
     const mapHeight = height2 - margin2.top - margin2.bottom;
@@ -211,22 +211,22 @@
             .attr("cx", 0)
             .attr("cy", 0)
             .attr("fill", d => {
-              if(d.pvi<=-10) {
+              if (d.pvi <= -10) {
                 return "#B03A2E";
-              }else if(d.pvi<=-3) {
+              } else if (d.pvi <= -3) {
                 return "#E74C3C";
               }
-              else if(d.pvi<0) {
+              else if (d.pvi < 0) {
                 return "#F5B7B1";
-              } else if(d.pvi>=17) {
+              } else if (d.pvi >= 17) {
                 return "#2874A6";
-              } else if(d.pvi>=11) {
+              } else if (d.pvi >= 11) {
                 return "#3498DB";
-              } else if(d.pvi>0) {
+              } else if (d.pvi > 0) {
                 return "#AED6F1";
               }
               else {
-                 return "#ABB2B9";
+                return "#ABB2B9";
               }
             })
         )
@@ -265,7 +265,7 @@
         percentData[d.State] = d['Percent of Total Pop with at least One Dose by State of Residence'];
       });
       console.log(pviData);
-      const colorScale = d3.scaleQuantile().domain(Object.values(percentData)).range(["#fff","#d1e8ed","#adc2da","#8879b3","#762b80"])
+      const colorScale = d3.scaleQuantile().domain(Object.values(percentData)).range(["#fff", "#d1e8ed", "#adc2da", "#8879b3", "#762b80"])
       state.style("fill", d => colorScale(percentData[idToState[d.id]]));
 
       // Animation
@@ -286,16 +286,16 @@
       function updateMouseover(d) {
         textbox.html('');
         let res = ""
-        if(d['pvi']>0){
+        if (d['pvi'] > 0) {
           res = "Republican"
-        } else if (d['pvi']<0){
+        } else if (d['pvi'] < 0) {
           res = "Democratic"
         } else {
           res = "Both"
         }
         let stateName = `State: ${d['State']}`;
         let pvi = `Cook Partisan Voting Index: ${format(d['pvi'])}`
-        let voteres = "Voting Result: "+res;
+        let voteres = "Voting Result: " + res;
         let totalD = `Total Doses Delivered: ${format(d['Total Doses Delivered'])}`
         let onepren = `Percent of Total Pop with at least One Dose by State of Residence: ${format(d['Percent of Total Pop with at least One Dose by State of Residence'])}`
         let twopren = `Percent of Total Pop Fully Vaccinated by State of Residence: ${format(d['Percent of Total Pop Fully Vaccinated by State of Residence'])}`
@@ -303,17 +303,17 @@
         frame.attr("width", maxWidth + 20);
 
         textbox.append("text").text(stateName)
-               .attr("x", 0).attr("y", 10);
+          .attr("x", 0).attr("y", 10);
         textbox.append("text").text(pvi)
-               .attr("x", 0).attr("y", 30);
+          .attr("x", 0).attr("y", 30);
         textbox.append("text").text(voteres)
-               .attr("x", 0).attr("y", 50);
+          .attr("x", 0).attr("y", 50);
         textbox.append("text").text(totalD)
-               .attr("x", 0).attr("y", 70);
+          .attr("x", 0).attr("y", 70);
         textbox.append("text").text(onepren)
-               .attr("x", 0).attr("y", 90);
+          .attr("x", 0).attr("y", 90);
         textbox.append("text").text(twopren)
-               .attr("x", 0).attr("y", 110);
+          .attr("x", 0).attr("y", 110);
 
       }
       // Event handler 2: Update mouse over for map
@@ -561,35 +561,35 @@
 
       // Dealing with sorting options for lollipop chart
       d3.select("#options").on("change", function () {
-            var option = d3.select(this).property("value")
-            console.log(option)
-            var data;
-            if (option === "pviValue") {
-                state.style("fill", d => {
-                    let pviValue = pviData[idToState[d.id]];
-                    console.log(pviValue);
-                    if(pviValue<=-10) {
-                      return "#B03A2E";
-                    }else if(pviValue<=-3) {
-                      return "#E74C3C";
-                    }
-                    else if(pviValue<0) {
-                      return "#F5B7B1";
-                    } else if(pviValue>=17) {
-                      return "#2874A6";
-                    } else if(pviValue>=11) {
-                      return "#3498DB";
-                    } else if(pviValue>0) {
-                      return "#AED6F1";
-                    }
-                    else {
-                       return "#ABB2B9";
-                    }
-                })
+        var option = d3.select(this).property("value")
+        console.log(option)
+        var data;
+        if (option === "pviValue") {
+          state.style("fill", d => {
+            let pviValue = pviData[idToState[d.id]];
+            console.log(pviValue);
+            if (pviValue <= -10) {
+              return "#B03A2E";
+            } else if (pviValue <= -3) {
+              return "#E74C3C";
             }
-            else if (option === "vaccineValue") {
-                state.style("fill", d => colorScale(percentData[idToState[d.id]]));
+            else if (pviValue < 0) {
+              return "#F5B7B1";
+            } else if (pviValue >= 17) {
+              return "#2874A6";
+            } else if (pviValue >= 11) {
+              return "#3498DB";
+            } else if (pviValue > 0) {
+              return "#AED6F1";
             }
+            else {
+              return "#ABB2B9";
+            }
+          })
+        }
+        else if (option === "vaccineValue") {
+          state.style("fill", d => colorScale(percentData[idToState[d.id]]));
+        }
       })
     }
 
