@@ -87,18 +87,19 @@
       <option value="sortDosePrecentTwo">Sort by Precent of Total Pop with fully Vaccinated</option>
     </select>
   </div>
-  <br>
+  <!-- <br>
   <a href="#choropleth">Click here to see the content below.</a>
-  <br>
-  <svg id="chart" height="500" width="1200" style="margin-top:20px; margin-bottom:20px">
-  </svg><br>
+  <br> -->
+  <svg id="chart" height="340" width="1000" style="margin-top:20px; margin-bottom:30px">
+  </svg>
   <div id="pulldown-bar2">
     <select id="options" style="width:400px;">
-      <option value="vaccineValue" selected>Precent of Total Pop with at least One Dose</option>
-      <option value="pviValue">Cook Partisan Voting Index</option>
+      <option value="vaccineValue">Precent of Total Pop with at least One Dose</option>
+      <option value="pviValue">Scaled by Cook Partisan Voting Index</option>
+      <option value="vaccineByPolitic" selected>Precent of Total Pop with at least One Dose by Politic</option>
     </select>
   </div>
-  <svg id="choropleth" height="500" width="1200" style="background: #fff; margin-top:50px">
+  <svg id="choropleth" height="300" width="700" style="background: #fff; margin-top:10px">
   </svg>
 
   <script>
@@ -110,7 +111,7 @@
     const chartWidth = width - margin.left - margin.right;
     const chartHeight = height - margin.top - margin.bottom;
     const mouseover = svg.append("g").attr("class", "mouseover")
-      .attr("transform", `translate(${margin.left + 15},${margin.top + 15})`);
+      .attr("transform", `translate(${margin.left + 15},${margin.top + 0})`);
     let annotations = svg.append("g").attr("id", "annotations");
     let chartArea = svg.append("g").attr("id", "points")
       .attr("transform", `translate(${margin.left},${margin.top})`);
@@ -207,9 +208,10 @@
         .join(
           enter => enter.append("circle")
             .attr("class", "node")
-            .attr("r", 8)
+            .attr("r", 6)
             .attr("cx", 0)
             .attr("cy", 0)
+            .attr("id", d => `${d.State}`)
             .attr("fill", d => {
               if (d.pvi <= -10) {
                 return "#B03A2E";
@@ -265,8 +267,17 @@
         percentData[d.State] = d['Percent of Total Pop with at least One Dose by State of Residence'];
       });
       console.log(pviData);
+      const percentExtent = d3.extent(merge_data, d => d['Percent of Total Pop with at least One Dose by State of Residence']);
+      console.log(percentExtent);
+      const blueScale = d3.scaleLinear().domain(percentExtent).range(["#ffffff", "#2874A6"]);
+      const redScale = d3.scaleLinear().domain(percentExtent).range(["#ffffff", "#B03A2E"]);
       const colorScale = d3.scaleQuantile().domain(Object.values(percentData)).range(["#fff", "#d1e8ed", "#adc2da", "#8879b3", "#762b80"])
-      state.style("fill", d => colorScale(percentData[idToState[d.id]]));
+      state.style("fill", d => {
+        if (percentData[idToState[d.id]] == 0) return "#ffffff";
+        else if (pviData[idToState[d.id]] < 0) return redScale(percentData[idToState[d.id]]);
+        else if (pviData[idToState[d.id]] > 0) return blueScale(percentData[idToState[d.id]]);
+        else return "gray";
+      });
 
       // Animation
       // Event handler 1: Update mouse over for lollipop chart
@@ -427,6 +438,8 @@
           let element = d3.select(this).datum()
           if (element.State == idToState[ID]) {
             updateMouseover(element);
+            // let circle = this;
+            // console.log(circle);
           }
         })
 
@@ -589,6 +602,14 @@
         }
         else if (option === "vaccineValue") {
           state.style("fill", d => colorScale(percentData[idToState[d.id]]));
+        }
+        else if (option === "vaccineByPolitic") {
+          state.style("fill", d => {
+            if (percentData[idToState[d.id]] == 0) return "#ffffff";
+            else if (pviData[idToState[d.id]] < 0) return redScale(percentData[idToState[d.id]]);
+            else if (pviData[idToState[d.id]] > 0) return blueScale(percentData[idToState[d.id]]);
+            else return "gray";
+          });
         }
       })
     }
