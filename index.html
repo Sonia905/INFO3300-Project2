@@ -3,6 +3,7 @@
 <head>
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <script src="https://d3js.org/topojson.v2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
   <link rel="stylesheet" type="text/css" href="css/normalize.css">
   <link rel="stylesheet" type="text/css" href="css/skeleton.css">
   <link rel="stylesheet" type="text/css" href="css/custom-style.css">
@@ -75,37 +76,42 @@
     stroke: grey;
     stroke-width: 1px;
   }
+
   .my-legend .legend-title {
     text-align: left;
     margin-bottom: 8px;
     font-weight: bold;
     font-size: 90%;
   }
+
   .my-legend .legend-scale ul {
-      margin: 0;
-      padding: 0;
-      float: left;
-      list-style: none;
+    margin: 0;
+    padding: 0;
+    float: left;
+    list-style: none;
   }
+
   .my-legend .legend-scale ul li {
-      display: block;
-      float: left;
-      width: 142px;
-      margin-bottom: 6px;
-      text-align: center;
-      font-size: 80%;
-      list-style: none;
+    display: block;
+    float: left;
+    width: 142px;
+    margin-bottom: 6px;
+    text-align: center;
+    font-size: 80%;
+    list-style: none;
   }
+
   .my-legend ul.legend-labels li span {
-      display: block;
-      float: left;
-      height: 15px;
-      width: 142px;
+    display: block;
+    float: left;
+    height: 15px;
+    width: 142px;
   }
 
   .my-legend a {
-      color: #777;
+    color: #777;
   }
+
   .header {
     overflow: hidden;
     background-color: #f1f1f1;
@@ -149,6 +155,7 @@
       float: none;
     }
   }
+
   div.relative {
     position: relative;
     left: 200px;
@@ -165,16 +172,16 @@
     </div>
   </div>
   <div class="relative">
-  <div id="pulldown-bar">
-    <select id="sort-select" style="width:400px;">
-      <option value="sortTotalDose">Sort by Total Doses Delivered</option>
-      <option value="sortDosePrecent"selected>Sort by Precent of Total Pop with at least One Dose</option>
-      <option value="sortDosePrecentTwo">Sort by Precent of Total Pop with fully Vaccinated</option>
-      <option value="sortPVI">Sort by Cook Partisan Voting Index</option>
-      <option value="sortAlpha">Sort by Alphabetically</option>
-    </select>
+    <div id="pulldown-bar">
+      <select id="sort-select" style="width:400px;">
+        <option value="sortTotalDose">Sort by Total Doses Delivered</option>
+        <option value="sortDosePrecent" selected>Sort by Precent of Total Pop with at least One Dose</option>
+        <option value="sortDosePrecentTwo">Sort by Precent of Total Pop with fully Vaccinated</option>
+        <option value="sortPVI">Sort by Cook Partisan Voting Index</option>
+        <option value="sortAlpha">Sort by Alphabetically</option>
+      </select>
+    </div>
   </div>
-</div>
   <!-- <br>
   <a href="#choropleth">Click here to see the content below.</a>
   <br> -->
@@ -183,33 +190,38 @@
     </svg>
   </div>
   <div class="relative">
-  <div class='my-legend'>
-  <div class='legend-title'>Cook Partisan Voting Index Color Scale</div>
-    <div class='legend-scale'>
-    <ul class='legend-labels'>
-      <li><span style='background:#B03A2E;'></span>less than -9</li>
-      <li><span style='background:#E74C3C;'></span>-9 to -3</li>
-      <li><span style='background:#F5B7B1;'></span>-3 to -1</li>
-      <li><span style='background:#ABB2B9;'></span>0</li>
-      <li><span style='background:#AED6F1;'></span>1 to 10</li>
-      <li><span style='background:#3498DB;'></span>11 to 16</li>
-      <li><span style='background:#2874A6;'></span> greater than 16 </li>
-    </ul>
+    <div class='my-legend'>
+      <div class='legend-title'>Cook Partisan Voting Index Color Scale</div>
+      <div class='legend-scale'>
+        <ul class='legend-labels'>
+          <li><span style='background:#B03A2E;'></span>less than -9</li>
+          <li><span style='background:#E74C3C;'></span>-9 to -3</li>
+          <li><span style='background:#F5B7B1;'></span>-3 to -1</li>
+          <li><span style='background:#ABB2B9;'></span>0</li>
+          <li><span style='background:#AED6F1;'></span>1 to 10</li>
+          <li><span style='background:#3498DB;'></span>11 to 16</li>
+          <li><span style='background:#2874A6;'></span> greater than 16 </li>
+        </ul>
+      </div>
     </div>
   </div>
-</div>
-<div class="relative">
-  <div id="pulldown-bar2">
-    <select id="options" style="width:400px;">
-      <option value="vaccineValue">Precent of Total Pop with at least One Dose</option>
-      <option value="pviValue">Scaled by Cook Partisan Voting Index</option>
-      <option value="vaccineByPolitic" selected>Precent of Total Pop with at least One Dose by Politic</option>
-    </select>
+  <div class="relative">
+    <div id="pulldown-bar2">
+      <select id="options" style="width:400px;">
+        <option value="vaccineValue">Precent of Total Pop with at least One Dose</option>
+        <option value="pviValue">Scaled by Cook Partisan Voting Index</option>
+        <option value="vaccineByPolitic" selected>Precent of Total Pop with at least One Dose by Politic</option>
+      </select>
+    </div>
   </div>
-</div>
   <div style="text-align:center;">
     <svg id="choropleth" height="300" width="700" style="background: #fff; margin-top:10px">
     </svg>
+  </div>
+  <div class="relative">
+    <div class='legend-title legend2'>Precent of Total Pop with at least One Dose(%)</div>
+    <svg id="map-legend-blue" width="1000" height="50" style="background: #fff; margin-bottom:0px"></svg>
+    <svg id="map-legend-red" width="1000" height="50" style="background: #fff; margin-top:5px"></svg>
   </div>
 
   <script>
@@ -380,8 +392,8 @@
       console.log(pviData);
       const percentExtent = d3.extent(merge_data, d => d['Percent of Total Pop with at least One Dose by State of Residence']);
       console.log(percentExtent);
-      const blueScale = d3.scaleLinear().domain(percentExtent).range(["#ffffff", "#2874A6"]);
-      const redScale = d3.scaleLinear().domain(percentExtent).range(["#ffffff", "#B03A2E"]);
+      const blueScale = d3.scaleLinear().domain(percentExtent).range(["#f1f8fd", "#2874A6"]);
+      const redScale = d3.scaleLinear().domain(percentExtent).range(["#fef7f7", "#B03A2E"]);
       const colorScale = d3.scaleQuantile().domain(Object.values(percentData)).range(["#fff", "#d1e8ed", "#adc2da", "#8879b3", "#762b80"])
       state.style("fill", d => {
         if (percentData[idToState[d.id]] == 0) return "#ffffff";
@@ -389,6 +401,22 @@
         else if (pviData[idToState[d.id]] > 0) return blueScale(percentData[idToState[d.id]]);
         else return "gray";
       });
+      const blueLine = d3.select("svg#map-legend-blue").append("g")
+        .attr("class", "legendLinear");
+      const legendBlue = d3.legendColor()
+        .shapeWidth(100)
+        .cells(10)
+        .orient('horizontal')
+        .scale(blueScale);
+      blueLine.call(legendBlue);
+      const redLine = d3.select("svg#map-legend-red").append("g")
+        .attr("class", "legendLinear");
+      const legendRed = d3.legendColor()
+        .shapeWidth(100)
+        .cells(10)
+        .orient('horizontal')
+        .scale(redScale);
+      redLine.call(legendRed);
 
       // Animation
       // Event handler 1: Update mouse over for lollipop chart
@@ -571,7 +599,7 @@
           const pviExtent = d3.extent(merge_data, d => d['pvi']);
           console.log(pviExtent)
           const avgPvi = d3.mean(merge_data, d => d['pvi']);
-          const pviDist = Math.max( Math.abs(pviExtent[0] - avgPvi), Math.abs(pviExtent[1] - avgPvi) );
+          const pviDist = Math.max(Math.abs(pviExtent[0] - avgPvi), Math.abs(pviExtent[1] - avgPvi));
 
           const adjustedPviExtent = [avgPvi - pviDist, avgPvi + pviDist];
           const pviScale = d3.scaleLinear().domain(adjustedPviExtent).range([chartHeight, 0]);
@@ -599,7 +627,7 @@
           const pviExtent = d3.extent(merge_data, d => d['pvi']);
           console.log(pviExtent)
           const avgPvi = d3.mean(merge_data, d => d['pvi']);
-          const pviDist = Math.max( Math.abs(pviExtent[0] - avgPvi), Math.abs(pviExtent[1] - avgPvi) );
+          const pviDist = Math.max(Math.abs(pviExtent[0] - avgPvi), Math.abs(pviExtent[1] - avgPvi));
 
           const adjustedPviExtent = [avgPvi - pviDist, avgPvi + pviDist];
           const pviScale = d3.scaleLinear().domain(adjustedPviExtent).range([chartHeight, 0]);
@@ -697,12 +725,15 @@
 
       })
 
-      // Dealing with sorting options for lollipop chart
+      // Dealing with sorting options for map
       d3.select("#options").on("change", function () {
         var option = d3.select(this).property("value")
         console.log(option)
         var data;
         if (option === "pviValue") {
+          document.querySelector('div.legend2').innerText = "Cook Partisan Voting Index By State (same scale as above)";
+          d3.select("svg#map-legend-red").attr("visibility", "hidden");
+          d3.select("svg#map-legend-blue").attr("visibility", "hidden");
           state.style("fill", d => {
             let pviValue = pviData[idToState[d.id]];
             console.log(pviValue);
@@ -726,9 +757,22 @@
           })
         }
         else if (option === "vaccineValue") {
+          document.querySelector('div.legend2').innerText = "Precent of Total Pop with at least One Dose(%)";
+          d3.select("svg#map-legend-red").attr("visibility", "hidden");
+          d3.select("svg#map-legend-blue").attr("visibility", "");
+          const legendPurple = d3.legendColor()
+            .shapeWidth(200)
+            .cells(10)
+            .orient('horizontal')
+            .scale(colorScale);
+          blueLine.call(legendPurple);
           state.style("fill", d => colorScale(percentData[idToState[d.id]]));
         }
         else if (option === "vaccineByPolitic") {
+          document.querySelector('div.legend2').innerText = "Precent of Total Pop with at least One Dose(%)";
+          d3.select("svg#map-legend-red").attr("visibility", "");
+          d3.select("svg#map-legend-blue").attr("visibility", "");
+          blueLine.call(legendBlue);
           state.style("fill", d => {
             if (percentData[idToState[d.id]] == 0) return "#ffffff";
             else if (pviData[idToState[d.id]] < 0) return redScale(percentData[idToState[d.id]]);
