@@ -75,9 +75,96 @@
     stroke: grey;
     stroke-width: 1px;
   }
+  .my-legend .legend-title {
+    text-align: left;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 90%;
+  }
+  .my-legend .legend-scale ul {
+      margin: 0;
+      padding: 0;
+      float: left;
+      list-style: none;
+  }
+  .my-legend .legend-scale ul li {
+      display: block;
+      float: left;
+      width: 142px;
+      margin-bottom: 6px;
+      text-align: center;
+      font-size: 80%;
+      list-style: none;
+  }
+  .my-legend ul.legend-labels li span {
+      display: block;
+      float: left;
+      height: 15px;
+      width: 142px;
+  }
+
+  .my-legend a {
+      color: #777;
+  }
+  .header {
+    overflow: hidden;
+    background-color: #f1f1f1;
+    padding: 20px 10px;
+  }
+
+  .header a {
+    float: left;
+    color: black;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 25px;
+    border-radius: 4px;
+  }
+
+  .header a.logo {
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  .header-right a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+
+  .header-right {
+    float: right;
+  }
+
+  @media screen and (max-width: 500px) {
+    .header a {
+      float: none;
+      display: block;
+      text-align: left;
+    }
+
+    .header-right {
+      float: none;
+    }
+  }
+  div.relative {
+    position: relative;
+    left: 200px;
+  }
 </style>
 
 <body>
+  <div class="header">
+    <a class="logo">Vaccine Result and Cook Partisan Voting Index</a>
+    <div class="header-right">
+      <a href="#pulldown-bar">Diagram1</a>
+      <a href="#pulldown-bar2">Diagram2</a>
+      <a href="#pulldown-bar2">Diagram3</a>
+    </div>
+  </div>
+  <div class="relative">
   <div id="pulldown-bar">
     <select id="sort-select" style="width:400px;">
       <option value="sortTotalDose">Sort by Total Doses Delivered</option>
@@ -87,11 +174,31 @@
       <option value="sortAlpha">Sort by Alphabetically</option>
     </select>
   </div>
+</div>
   <!-- <br>
   <a href="#choropleth">Click here to see the content below.</a>
   <br> -->
-  <svg id="chart" height="340" width="1000" style="margin-top:20px; margin-bottom:30px">
-  </svg>
+  <div style="text-align:center;">
+    <svg id="chart" height="340" width="1000" style="margin-top:20px; margin-bottom:30px">
+    </svg>
+  </div>
+  <div class="relative">
+  <div class='my-legend'>
+  <div class='legend-title'>Cook Partisan Voting Index Color Scale</div>
+    <div class='legend-scale'>
+    <ul class='legend-labels'>
+      <li><span style='background:#B03A2E;'></span>less than -9</li>
+      <li><span style='background:#E74C3C;'></span>-9 to -3</li>
+      <li><span style='background:#F5B7B1;'></span>-3 to -1</li>
+      <li><span style='background:#ABB2B9;'></span>0</li>
+      <li><span style='background:#AED6F1;'></span>1 to 10</li>
+      <li><span style='background:#3498DB;'></span>11 to 16</li>
+      <li><span style='background:#2874A6;'></span> greater than 16 </li>
+    </ul>
+    </div>
+  </div>
+</div>
+<div class="relative">
   <div id="pulldown-bar2">
     <select id="options" style="width:400px;">
       <option value="vaccineValue">Precent of Total Pop with at least One Dose</option>
@@ -99,8 +206,11 @@
       <option value="vaccineByPolitic" selected>Precent of Total Pop with at least One Dose by Politic</option>
     </select>
   </div>
-  <svg id="choropleth" height="300" width="700" style="background: #fff; margin-top:10px">
-  </svg>
+</div>
+  <div style="text-align:center;">
+    <svg id="choropleth" height="300" width="700" style="background: #fff; margin-top:10px">
+    </svg>
+  </div>
 
   <script>
     // Setting for first chart
