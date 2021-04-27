@@ -80,11 +80,11 @@
 <body>
   <div id="pulldown-bar">
     <select id="sort-select" style="width:400px;">
-      <option value="sortPVI" selected>Sort by Cook Partisan Voting Index</option>
-      <option value="sortAlpha">Sort by Alphabetically</option>
       <option value="sortTotalDose">Sort by Total Doses Delivered</option>
-      <option value="sortDosePrecent">Sort by Precent of Total Pop with at least One Dose</option>
+      <option value="sortDosePrecent"selected>Sort by Precent of Total Pop with at least One Dose</option>
       <option value="sortDosePrecentTwo">Sort by Precent of Total Pop with fully Vaccinated</option>
+      <option value="sortPVI">Sort by Cook Partisan Voting Index</option>
+      <option value="sortAlpha">Sort by Alphabetically</option>
     </select>
   </div>
   <!-- <br>
@@ -152,20 +152,20 @@
 
 
       // Lollipop chart
-      const pviExtent = d3.extent(merge_data, d => d['pvi']);
-      const avgPvi = d3.mean(merge_data, d => d['pvi']);
-      const pviDist = Math.max(Math.abs(pviExtent[0] - avgPvi), Math.abs(pviExtent[1] - avgPvi));
+      merge_data.sort((a, b) => d3.ascending(a['Percent of Total Pop with at least One Dose by State of Residence'], b['Percent of Total Pop with at least One Dose by State of Residence']));
+      let dosesExten = d3.extent(merge_data, d => d['Percent of Total Pop with at least One Dose by State of Residence']);
+      let dosesScale = d3.scaleLinear().domain(dosesExten).range([chartHeight, 0]);
+      let avgDose = d3.mean(merge_data, d => d['Percent of Total Pop with at least One Dose by State of Residence']);
 
-      const adjustedPviExtent = [avgPvi - pviDist, avgPvi + pviDist];
-      const pviScale = d3.scaleLinear().domain(adjustedPviExtent).range([chartHeight, 0]);
-      merge_data.sort((a, b) => d3.ascending(a['pvi'], b['pvi']))
       const states = d3.map(merge_data, d => d.State)
       const stateScale = d3.scalePoint().domain(states).range([0, chartWidth])
         .padding(0.1);
       const codes = d3.map(merge_data, d => d.Code);
       const codeScale = d3.scalePoint().domain(codes).range([0, chartWidth])
         .padding(0.1);
-      let leftAxis = d3.axisLeft(pviScale);
+
+
+      let leftAxis = d3.axisLeft(dosesScale).tickFormat(function (d) { return d + "%"; });
 
       let leftAxisG = annotations.append("g")
         .attr("class", "y axis")
@@ -176,6 +176,7 @@
         .attr("class", "x axis")
         .attr("transform", `translate(${margin.left},${chartHeight + margin.top + 10})`)
         .call(bottomAxis);
+
       let midline = chartArea.selectAll("line.avgline").data(merge_data)
         .join(
           enter => enter.append("line")
@@ -183,15 +184,15 @@
         )
         .attr("x1", 0)
         .attr("x2", chartWidth + 10)
-        .attr("y1", pviScale(avgPvi))
-        .attr("y2", pviScale(avgPvi));
+        .attr("y1", dosesScale(avgDose))
+        .attr("y2", dosesScale(avgDose));
       let rec = chartArea.selectAll("rect.activeRegion").data(merge_data)
         .join(
           enter => enter.append("rect")
             .attr("class", "activeRegion")
             .attr("x", d => codeScale(d.Code) - 10)
-            .attr("y", d => Math.min(pviScale(avgPvi), pviScale(d['pvi'])))
-            .attr("height", d => Math.abs(pviScale(avgPvi) - pviScale(d['pvi'])))
+            .attr("y", d => Math.min(dosesScale(avgDose), dosesScale(d['Percent of Total Pop with at least One Dose by State of Residence'])))
+            .attr("height", d => Math.abs(dosesScale(avgDose) - dosesScale(d['Percent of Total Pop with at least One Dose by State of Residence'])))
             .attr("width", 20)
             .attr("fill", "none")
         )
@@ -202,7 +203,7 @@
             .attr("stroke", "#333")
         )
         .attr("x1", d => codeScale(d.Code)).attr("x2", d => codeScale(d.Code))
-        .attr("y1", pviScale(avgPvi)).attr("y2", d => pviScale(d.pvi));
+        .attr("y1", dosesScale(avgDose)).attr("y2", d => dosesScale(d['Percent of Total Pop with at least One Dose by State of Residence']));
 
       let circles = chartArea.selectAll("circle.node").data(merge_data)
         .join(
@@ -232,7 +233,7 @@
               }
             })
         )
-        .attr("transform", d => `translate(${codeScale(d.Code)},${pviScale(d.pvi)})`);
+        .attr("transform", d => `translate(${codeScale(d.Code)},${dosesScale(d['Percent of Total Pop with at least One Dose by State of Residence'])})`);
 
       // Map
       const us = await d3.json("us-smaller.json");
@@ -457,6 +458,13 @@
         var data;
         if (option === "sortPVI") {
           merge_data.sort((a, b) => d3.ascending(a['pvi'], b['pvi']))
+          const pviExtent = d3.extent(merge_data, d => d['pvi']);
+          console.log(pviExtent)
+          const avgPvi = d3.mean(merge_data, d => d['pvi']);
+          const pviDist = Math.max( Math.abs(pviExtent[0] - avgPvi), Math.abs(pviExtent[1] - avgPvi) );
+
+          const adjustedPviExtent = [avgPvi - pviDist, avgPvi + pviDist];
+          const pviScale = d3.scaleLinear().domain(adjustedPviExtent).range([chartHeight, 0]);
           data = merge_data;
           console.log(merge_data)
           newCodes = d3.map(data, d => d.Code)
@@ -478,6 +486,13 @@
         if (option === "sortAlpha") {
           merge_data.sort((a, b) => d3.ascending(a['State'], b['State']));
           data = merge_data;
+          const pviExtent = d3.extent(merge_data, d => d['pvi']);
+          console.log(pviExtent)
+          const avgPvi = d3.mean(merge_data, d => d['pvi']);
+          const pviDist = Math.max( Math.abs(pviExtent[0] - avgPvi), Math.abs(pviExtent[1] - avgPvi) );
+
+          const adjustedPviExtent = [avgPvi - pviDist, avgPvi + pviDist];
+          const pviScale = d3.scaleLinear().domain(adjustedPviExtent).range([chartHeight, 0]);
           console.log(merge_data)
           newCodes = d3.map(data, d => d.Code)
           codeScale.domain(newCodes);
