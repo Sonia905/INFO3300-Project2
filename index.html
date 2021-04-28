@@ -234,7 +234,7 @@
     <svg id="map-legend-red" width="1000" height="50" style="background: #fff; margin-top:5px"></svg>
   </div>
   <div class="relative" height="300" width="450" float="right">
-    <b>Choose a max number for Precent of Total Pop with at least One Dose (20-40)<br></b>
+    <b>Choose a min value for Precent of Total Pop with at least One Dose (20-40)<br></b>
     <input type="range" id="volume" name="volume" min="20" max="40" style="margin-bottom:0px;">
     <b id="chosenNum"></b>
     <div class="filterAnalysis" style="margin-top:20px; margin-left: 20px;">
@@ -419,8 +419,8 @@
       const colorScale = d3.scaleQuantile().domain(Object.values(percentData)).range(["#fff", "#d1e8ed", "#adc2da", "#8879b3", "#762b80"])
       state.style("fill", d => {
         if (percentData[idToState[d.id]] == 0) return "#ffffff";
-        else if (pviData[idToState[d.id]] < 0) return redScale(percentData[idToState[d.id]]);
-        else if (pviData[idToState[d.id]] > 0) return blueScale(percentData[idToState[d.id]]);
+        else if (pviData[idToState[d.id]] < 0) return blueScale(percentData[idToState[d.id]]);
+        else if (pviData[idToState[d.id]] > 0) return redScale(percentData[idToState[d.id]]);
         else return "gray";
       });
       const blueLine = d3.select("svg#map-legend-blue").append("g")
@@ -814,8 +814,8 @@
           blueLine.call(legendBlue);
           state.style("fill", d => {
             if (percentData[idToState[d.id]] == 0) return "#ffffff";
-            else if (pviData[idToState[d.id]] < 0) return redScale(percentData[idToState[d.id]]);
-            else if (pviData[idToState[d.id]] > 0) return blueScale(percentData[idToState[d.id]]);
+            else if (pviData[idToState[d.id]] < 0) return blueScale(percentData[idToState[d.id]]);
+            else if (pviData[idToState[d.id]] > 0) return redScale(percentData[idToState[d.id]]);
             else return "gray";
           });
         }
@@ -825,8 +825,8 @@
       let redNumTotal = 0;
       let blueNumTotal = 0;
       merge_data.forEach((d, i) => {
-        if (d.pvi > 0) blueNumTotal = blueNumTotal + 1;
-        else if (d.pvi < 0) redNumTotal = redNumTotal + 1;
+        if (d.pvi < 0) blueNumTotal = blueNumTotal + 1;
+        else if (d.pvi > 0) redNumTotal = redNumTotal + 1;
       })
       function updateFilter(num) {
         let redNum = 0;
@@ -834,8 +834,8 @@
         document.querySelector('b#chosenNum').innerText = `${num}`;
         merge_data.forEach((d, i) => {
           if (d['Percent of Total Pop with at least One Dose by State of Residence'] > num) {
-            if (d.pvi > 0) blueNum = blueNum + 1;
-            else if (d.pvi < 0) redNum = redNum + 1;
+            if (d.pvi < 0) blueNum = blueNum + 1;
+            else if (d.pvi > 0) redNum = redNum + 1;
           }
           console.log(`Number of blue states with vaccine rate over ${num}: ${blueNumTotal}`);
           document.querySelector('div#blueNum').innerText = `Number of blue states: ${blueNum}`;
