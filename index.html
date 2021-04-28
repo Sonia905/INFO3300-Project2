@@ -174,27 +174,31 @@
 
 <body>
   <div class="header">
-    <a class="logo">Vaccine Result and Cook Partisan Voting Index</a>
+    <a class="logo">Vaccination Rate and Policital Inclination of US States</a>
+
     <div class="header-right">
       <a href="#pulldown-bar">Diagram1</a>
       <a href="#pulldown-bar2">Diagram2</a>
       <a href="#pulldown-bar2">Diagram3</a>
     </div>
   </div>
+
   <div class="relative">
+    These diagrams reprsent the states' vaccination rates and political inclinations at the same time, in order to show the potential relationship between these factors. The color red represents Republican States and blue represents Democratic states, while grey represent states with little to no political inclination, based on the Cook Partisian Voting Index. The saturation of the colors represent the relative rate of vaccination, with deeper colors meaning higher number or percentage vaccinated.
     <div id="pulldown-bar">
       <select id="sort-select" style="width:400px;">
         <option value="sortTotalDose">Sort by Total Doses Delivered</option>
         <option value="sortDosePrecent" selected>Sort by Precent of Total Pop with at least One Dose</option>
-        <option value="sortDosePrecentTwo">Sort by Precent of Total Pop with fully Vaccinated</option>
+        <option value="sortDosePrecentTwo">Sort by Precent of Total Pop fully Vaccinated</option>
         <option value="sortPVI">Sort by Cook Partisan Voting Index</option>
-        <option value="sortAlpha">Sort by Alphabetically</option>
+        <option value="sortAlpha">Sort by Alphabet</option>
       </select>
     </div>
   </div>
   <!-- <br>
   <a href="#choropleth">Click here to see the content below.</a>
   <br> -->
+
   <div style="text-align:center;">
     <svg id="chart" height="340" width="1000" style="margin-top:20px; margin-bottom:30px">
     </svg>
@@ -220,7 +224,7 @@
       <select id="options" style="width:400px;">
         <option value="vaccineValue">Precent of Total Pop with at least One Dose</option>
         <option value="pviValue">Scaled by Cook Partisan Voting Index</option>
-        <option value="vaccineByPolitic" selected>Precent of Total Pop with at least One Dose by Politic</option>
+        <option value="vaccineByPolitic" selected>Precent of Total Pop with at least One Dose (with Political Inclination)</option>
       </select>
     </div>
   </div>
@@ -359,18 +363,18 @@
             .attr("id", d => `${d.State}`)
             .attr("fill", d => {
               if (d.pvi <= -10) {
-                return "#B03A2E";
+                return "#2874A6";
               } else if (d.pvi <= -3) {
-                return "#E74C3C";
+                return "#3498DB";
               }
               else if (d.pvi < 0) {
-                return "#F5B7B1";
-              } else if (d.pvi >= 17) {
-                return "#2874A6";
-              } else if (d.pvi >= 11) {
-                return "#3498DB";
-              } else if (d.pvi > 0) {
                 return "#AED6F1";
+              } else if (d.pvi >= 17) {
+                return "#B03A2E";
+              } else if (d.pvi >= 11) {
+                return "#E74C3C";
+              } else if (d.pvi > 0) {
+                return "#F5B7B1";
               }
               else {
                 return "#ABB2B9";
@@ -838,10 +842,10 @@
             else if (d.pvi > 0) redNum = redNum + 1;
           }
           console.log(`Number of blue states with vaccine rate over ${num}: ${blueNumTotal}`);
-          document.querySelector('div#blueNum').innerText = `Number of blue states: ${blueNum}`;
-          document.querySelector('div#redNum').innerText = `Number of red states: ${redNum}`;
-          document.querySelector('div#bluePercent').innerText = `Percent of total blue states: ${format(100 * blueNum / blueNumTotal)} %`;
-          document.querySelector('div#redPercent').innerText = `Percent of total red states: ${format(100 * redNum / redNumTotal)} %`;
+          document.querySelector('div#blueNum').innerText = `Number of Democratic states: ${blueNum}`;
+          document.querySelector('div#redNum').innerText = `Number of Republican states: ${redNum}`;
+          document.querySelector('div#bluePercent').innerText = `Percent of total Democratic states: ${format(100 * blueNum / blueNumTotal)} %`;
+          document.querySelector('div#redPercent').innerText = `Percent of total Republican states: ${format(100 * redNum / redNumTotal)} %`;
           document.querySelector('b#range').innerText = `with vaccine rate over ${num}`;
         })
       }
