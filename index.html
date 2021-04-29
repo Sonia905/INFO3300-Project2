@@ -25,11 +25,6 @@
     stroke-width: 1px;
   }
 
-  circle.node {
-    stroke: black;
-    stroke-width: 1px;
-  }
-
   rect.activeRegion {
     fill: none;
     pointer-events: all;
@@ -396,6 +391,8 @@
             .attr("r", 6)
             .attr("cx", 0)
             .attr("cy", 0)
+            .attr("stroke", "black")
+            .attr("stroke-width", 1)
             .attr("id", d => `${d.State}`)
             .attr("fill", d => {
               if (d.pvi <= -10) {
@@ -589,7 +586,6 @@
         mouseover.attr("visibility", "");
         d3.select(this).transition().duration(200)
           .attr("r", 10)
-          .attr("stroke", "black")
           .attr("stroke-width", 4);
         updateMouseover(d3.select(this).datum())
         // invoke map handler
@@ -607,8 +603,7 @@
         mouseover.attr("visibility", "hidden");
         d3.select(this).transition().duration(200)
           .attr("r", 6)
-          .attr("stroke", "black")
-          .attr("stroke-width", 4);
+          .attr("stroke-width", 1);
         let stateName = d3.select(this).datum().State;
         // invoke map handler
         state.each(function () {
@@ -624,7 +619,9 @@
         updateMouseover(d3.select(this).datum())
         let stateName = d3.select(this).datum().State;
         let circleTarget = d3.select(`circle#${stateName}`);
-        circleTarget.transition().duration(200).attr("r", 10);
+        circleTarget.transition().duration(200)
+          .attr("r", 10)
+          .attr("stroke-width", 4);
         // invoke map handler
         state.each(function () {
           let element = d3.select(this).datum()
@@ -639,7 +636,9 @@
         mouseover.attr("visibility", "hidden");
         let stateName = d3.select(this).datum().State;
         let circleTarget = d3.select(`circle#${stateName}`);
-        circleTarget.transition().duration(200).attr("r", 6);
+        circleTarget.transition().duration(200)
+          .attr("r", 6)
+          .attr("stroke-width", 1);
         // invoke map handler
         state.each(function () {
           let element = d3.select(this).datum()
@@ -659,7 +658,9 @@
           let element = d3.select(this).datum()
           if (element.State == idToState[ID]) {
             updateMouseover(element);
-            d3.select(this).transition().duration(200).attr("r", 10);
+            d3.select(this).transition().duration(200)
+              .attr("r", 10)
+              .attr("stroke-width", 4);
           }
         })
       });
@@ -672,7 +673,9 @@
         circles.each(function () {
           let element = d3.select(this).datum()
           if (element.State == idToState[ID]) {
-            d3.select(this).transition().duration(200).attr("r", 6);
+            d3.select(this).transition().duration(200)
+              .attr("r", 6)
+              .attr("stroke-width", 1);
           }
         })
       });
