@@ -816,7 +816,6 @@
           d3.select("svg#map-legend-blue").attr("visibility", "hidden");
           state.style("fill", d => {
             let pviValue = pviData[idToState[d.id]];
-            console.log(pviValue);
             if (pviValue <= -10) {
               return "#B03A2E";
             } else if (pviValue <= -3) {
@@ -848,7 +847,7 @@
             .orient('horizontal')
             .scale(colorScale);
           blueLine.call(legendPurple);
-          state.style("fill", d => colorScale(percentData[idToState[d.id]]));
+          // state.style("fill", d => colorScale(percentData[idToState[d.id]]));
         }
         else if (option === "vaccineByPolitic") {
           optionControl = "vaccineByPolitic";
@@ -857,12 +856,12 @@
           d3.select("svg#map-legend-red").attr("visibility", "");
           d3.select("svg#map-legend-blue").attr("visibility", "");
           blueLine.call(legendBlue);
-          state.style("fill", d => {
-            if (percentData[idToState[d.id]] == 0) return "#ffffff";
-            else if (pviData[idToState[d.id]] < 0) return blueScale(percentData[idToState[d.id]]);
-            else if (pviData[idToState[d.id]] > 0) return redScale(percentData[idToState[d.id]]);
-            else return "gray";
-          });
+          // state.style("fill", d => {
+          //   if (percentData[idToState[d.id]] == 0) return "#ffffff";
+          //   else if (pviData[idToState[d.id]] < 0) return blueScale(percentData[idToState[d.id]]);
+          //   else if (pviData[idToState[d.id]] > 0) return redScale(percentData[idToState[d.id]]);
+          //   else return "gray";
+          // });
         }
       })
 
@@ -876,7 +875,6 @@
       let optionControl = "vaccineByPolitic";
       let numControl = 23;
       function updateFilter(num) {
-        numControl = num;
         let redNum = 0;
         let blueNum = 0;
         document.querySelector('b#chosenNum').innerText = `${num}`;
@@ -914,6 +912,7 @@
       input.addEventListener('input', updateValue);
       function updateValue(evt) {
         // console.log(log.valueAsNumber);
+        numControl = log.valueAsNumber;
         updateFilter(log.valueAsNumber);
       }
     }
