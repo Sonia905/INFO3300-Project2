@@ -165,11 +165,6 @@
     display: inline-block;
     vertical-align: top;
   }
-
-  div.inputRange {
-    display: inline-block;
-    vertical-align: top;
-  }
 </style>
 
 <body>
@@ -184,7 +179,11 @@
   </div>
 
   <div class="relative">
-    These diagrams reprsent the states' vaccination rates and political inclinations at the same time, in order to show the potential relationship between these factors. The color red represents Republican States and blue represents Democratic states, while grey represent states with little to no political inclination, based on the Cook Partisian Voting Index. The saturation of the colors represent the relative rate of vaccination, with deeper colors meaning higher number or percentage vaccinated.
+    These diagrams reprsent the states' vaccination rates and political inclinations at the same time, in order to show
+    the potential relationship between these factors. The color red represents Republican States and blue represents
+    Democratic states, while grey represent states with little to no political inclination, based on the Cook Partisian
+    Voting Index. The saturation of the colors represent the relative rate of vaccination, with deeper colors meaning
+    higher number or percentage vaccinated.
     <div id="pulldown-bar">
       <select id="sort-select" style="width:400px;">
         <option value="sortTotalDose">Sort by Total Doses Delivered</option>
@@ -224,7 +223,8 @@
       <select id="options" style="width:400px;">
         <option value="vaccineValue">Precent of Total Pop with at least One Dose</option>
         <option value="pviValue">Scaled by Cook Partisan Voting Index</option>
-        <option value="vaccineByPolitic" selected>Precent of Total Pop with at least One Dose (with Political Inclination)</option>
+        <option value="vaccineByPolitic" selected>Precent of Total Pop with at least One Dose (with Political
+          Inclination)</option>
       </select>
     </div>
   </div>
