@@ -438,6 +438,7 @@
         .attr("d", path);
 
       // Generate data for map color
+      // create dictionary for map state name to data value
       let idToState = {};
       let pviData = {};
       let percentData = {};
@@ -451,10 +452,13 @@
         percentData[d.State] = d['Percent of Total Pop with at least One Dose by State of Residence'];
       });
       console.log(pviData);
+      // scale
       const percentExtent = d3.extent(merge_data, d => d['Percent of Total Pop with at least One Dose by State of Residence']);
       console.log(percentExtent);
+      // two scale for option=vaccineByPolitic, the more saturate means the higher the vaccine rate. So two scale for different color
       const blueScale = d3.scaleLinear().domain(percentExtent).range(["#f1f8fd", "#2874A6"]);
       const redScale = d3.scaleLinear().domain(percentExtent).range(["#fef7f7", "#B03A2E"]);
+      // one scale for option=vaccineValue
       const colorScale = d3.scaleQuantile().domain(Object.values(percentData)).range(["#fff", "#d1e8ed", "#adc2da", "#8879b3", "#762b80"])
       state.style("fill", d => {
         if (percentData[idToState[d.id]] == 0) return "#ffffff";
@@ -462,6 +466,7 @@
         else if (pviData[idToState[d.id]] > 0) return redScale(percentData[idToState[d.id]]);
         else return "gray";
       });
+      // create red and blue legend
       const blueLine = d3.select("svg#map-legend-blue").append("g")
         .attr("class", "legendLinear");
       const legendBlue = d3.legendColor()
@@ -528,7 +533,7 @@
 
       }
       // Event handler 2: Update mouse over for map
-      let tooltipWidth = 110;
+      let tooltipWidth = 130;
       let tooltipHeight = 40;
       let tooltip = map.append("g")
         .attr("class", "tooltip")
@@ -552,12 +557,6 @@
         .attr("alignment-baseline", "hanging")
         .attr("x", 0)
         .attr("y", 22);
-      // let txt3 = tooltip.append("text")
-      //   .attr("fill", "white")
-      //   .attr("text-anchor", "middle")
-      //   .attr("alignment-baseline", "hanging")
-      //   .attr("x", 0)
-      //   .attr("y", 42);
       let momesh = map.append("path")
         .attr("class", "mouseover outline")
         .attr("d", "");
@@ -571,7 +570,6 @@
         var mo = topojson.mesh(us, us.objects.states, function (a, b) { return a.id === stateID || b.id === stateID; });
         momesh.datum(mo).attr("d", path)
         txt.text(idToState[stateID]);
-        // txt2.text(`pvi value: ${pviData[idToState[stateID]]}`);
         txt2.text(`vaccine rate: ${format(percentData[idToState[stateID]])}`)
         let bounds = path.bounds(state.datum());
         let xPos = (bounds[0][0] + bounds[1][0]) / 2.0;
@@ -586,12 +584,14 @@
 
       // Mouse over handling
       circles.on("mouseover", function (d) {
+        // invoke lollipop chart handler & sizing circle
         mouseover.attr("visibility", "");
         d3.select(this).transition().duration(200)
           .attr("r", 10)
           .attr("stroke", "black")
           .attr("stroke-width", 4);
         updateMouseover(d3.select(this).datum())
+        // invoke map handler
         let stateName = d3.select(this).datum().State;
         state.each(function () {
           let element = d3.select(this).datum()
@@ -602,12 +602,14 @@
       });
 
       circles.on("mouseout", function () {
+        // invoke lollipop chart handler & sizing circle
         mouseover.attr("visibility", "hidden");
         d3.select(this).transition().duration(200)
           .attr("r", 6)
           .attr("stroke", "black")
           .attr("stroke-width", 4);
         let stateName = d3.select(this).datum().State;
+        // invoke map handler
         state.each(function () {
           let element = d3.select(this).datum()
           if (stateName == idToState[element.id]) {
@@ -616,11 +618,13 @@
         })
       });
       rec.on("mouseover", function (d) {
+        // invoke lollipop chart handler & sizing circle
         mouseover.attr("visibility", "");
         updateMouseover(d3.select(this).datum())
         let stateName = d3.select(this).datum().State;
         let circleTarget = d3.select(`circle#${stateName}`);
         circleTarget.transition().duration(200).attr("r", 10);
+        // invoke map handler
         state.each(function () {
           let element = d3.select(this).datum()
           if (stateName == idToState[element.id]) {
@@ -630,10 +634,12 @@
       });
 
       rec.on("mouseout", function () {
+        // invoke lollipop chart handler & sizing circle
         mouseover.attr("visibility", "hidden");
         let stateName = d3.select(this).datum().State;
         let circleTarget = d3.select(`circle#${stateName}`);
         circleTarget.transition().duration(200).attr("r", 6);
+        // invoke map handler
         state.each(function () {
           let element = d3.select(this).datum()
           if (stateName == idToState[element.id]) {
@@ -643,7 +649,9 @@
       });
 
       state.on("mouseenter", function (d) {
+        // invoke map handler
         mouseEntersPlot(this);
+        // invoke lollipop chart handler & sizing circle
         mouseover.attr("visibility", "");
         let ID = d3.select(this).datum().id;
         circles.each(function () {
@@ -655,8 +663,10 @@
         })
       });
       state.on("mouseout", function (d) {
+        // invoke map handler
         mouseLeavesPlot(this);
         let ID = d3.select(this).datum().id;
+        // invoke lollipop chart handler & sizing circle
         mouseover.attr("visibility", "hidden");
         circles.each(function () {
           let element = d3.select(this).datum()
@@ -810,9 +820,11 @@
         var data;
         if (option === "pviValue") {
           optionControl = "pviValue";
+          // update legend
           document.querySelector('div.legend2').innerText = "Cook Partisan Voting Index By State (same scale as above)";
           d3.select("svg#map-legend-red").attr("visibility", "hidden");
           d3.select("svg#map-legend-blue").attr("visibility", "hidden");
+          // update color
           state.style("fill", d => {
             let pviValue = pviData[idToState[d.id]];
             if (pviValue <= -10) {
@@ -836,7 +848,9 @@
         }
         else if (option === "vaccineValue") {
           optionControl = "vaccineValue";
+          // update color for map
           updateFilter(numControl);
+          // update legend
           document.querySelector('div.legend2').innerText = "Precent of Total Pop with at least One Dose(%)";
           d3.select("svg#map-legend-red").attr("visibility", "hidden");
           d3.select("svg#map-legend-blue").attr("visibility", "");
@@ -846,21 +860,16 @@
             .orient('horizontal')
             .scale(colorScale);
           blueLine.call(legendPurple);
-          // state.style("fill", d => colorScale(percentData[idToState[d.id]]));
         }
         else if (option === "vaccineByPolitic") {
           optionControl = "vaccineByPolitic";
+          // update color
           updateFilter(numControl);
+          // update legend
           document.querySelector('div.legend2').innerText = "Precent of Total Pop with at least One Dose(%)";
           d3.select("svg#map-legend-red").attr("visibility", "");
           d3.select("svg#map-legend-blue").attr("visibility", "");
           blueLine.call(legendBlue);
-          // state.style("fill", d => {
-          //   if (percentData[idToState[d.id]] == 0) return "#ffffff";
-          //   else if (pviData[idToState[d.id]] < 0) return blueScale(percentData[idToState[d.id]]);
-          //   else if (pviData[idToState[d.id]] > 0) return redScale(percentData[idToState[d.id]]);
-          //   else return "gray";
-          // });
         }
       })
 
@@ -873,9 +882,11 @@
       })
       let optionControl = "vaccineByPolitic";
       let numControl = 23;
+      // update color for map with filter
       function updateFilter(num) {
         let redNum = 0;
         let blueNum = 0;
+        // update label for counting result
         document.querySelector('b#chosenNum').innerText = `${num}`;
         merge_data.forEach((d, i) => {
           if (d['Percent of Total Pop with at least One Dose by State of Residence'] > num) {
@@ -888,6 +899,8 @@
           document.querySelector('div#redPercent').innerText = `Percent of total Republican states: ${format(100 * redNum / redNumTotal)} %`;
           document.querySelector('b#range').innerText = `with vaccine rate over ${num}`;
         })
+        // update color for two cases
+        // case 1
         if (optionControl === "vaccineByPolitic") {
           state.style("fill", d => {
             if (percentData[idToState[d.id]] < num) return "#ffffff";
@@ -897,6 +910,7 @@
             else return "gray";
           });
         }
+        // case 2
         else if (optionControl === "vaccineValue") {
           state.style("fill", d => {
             if (percentData[idToState[d.id]] < num) return "#ffffff";
@@ -906,12 +920,14 @@
 
       }
       updateFilter(23);
+      // filter input handler
       const input = document.querySelector('input');
       const log = document.getElementById('volume');
       input.addEventListener('input', updateValue);
       function updateValue(evt) {
         // console.log(log.valueAsNumber);
         numControl = log.valueAsNumber;
+        // update color
         updateFilter(log.valueAsNumber);
       }
     }
