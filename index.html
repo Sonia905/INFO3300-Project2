@@ -254,7 +254,7 @@
     <div id="pulldown-bar2">
       <select id="options" style="width:400px;">
         <option value="vaccineValue">Precent of Total Pop with at least One Dose</option>
-        <option value="pviValue">Scaled by Cook Partisan Voting Index</option>
+        <option value="pviValue">Cook Partisan Voting Index</option>
         <option value="vaccineByPolitic" selected>Precent of Total Pop with at least One Dose (with Political
           Inclination)</option>
       </select>
@@ -810,6 +810,7 @@
         console.log(option)
         var data;
         if (option === "pviValue") {
+          optionControl = "pviValue";
           document.querySelector('div.legend2').innerText = "Cook Partisan Voting Index By State (same scale as above)";
           d3.select("svg#map-legend-red").attr("visibility", "hidden");
           d3.select("svg#map-legend-blue").attr("visibility", "hidden");
@@ -836,6 +837,8 @@
           })
         }
         else if (option === "vaccineValue") {
+          optionControl = "vaccineValue";
+          updateFilter(numControl);
           document.querySelector('div.legend2').innerText = "Precent of Total Pop with at least One Dose(%)";
           d3.select("svg#map-legend-red").attr("visibility", "hidden");
           d3.select("svg#map-legend-blue").attr("visibility", "");
@@ -848,6 +851,8 @@
           state.style("fill", d => colorScale(percentData[idToState[d.id]]));
         }
         else if (option === "vaccineByPolitic") {
+          optionControl = "vaccineByPolitic";
+          updateFilter(numControl);
           document.querySelector('div.legend2').innerText = "Precent of Total Pop with at least One Dose(%)";
           d3.select("svg#map-legend-red").attr("visibility", "");
           d3.select("svg#map-legend-blue").attr("visibility", "");
@@ -868,7 +873,10 @@
         if (d.pvi < 0) blueNumTotal = blueNumTotal + 1;
         else if (d.pvi > 0) redNumTotal = redNumTotal + 1;
       })
+      let optionControl = "vaccineByPolitic";
+      let numControl = 23;
       function updateFilter(num) {
+        numControl = num;
         let redNum = 0;
         let blueNum = 0;
         document.querySelector('b#chosenNum').innerText = `${num}`;
@@ -883,8 +891,24 @@
           document.querySelector('div#redPercent').innerText = `Percent of total Republican states: ${format(100 * redNum / redNumTotal)} %`;
           document.querySelector('b#range').innerText = `with vaccine rate over ${num}`;
         })
+        if (optionControl === "vaccineByPolitic") {
+          state.style("fill", d => {
+            if (percentData[idToState[d.id]] < num) return "#ffffff";
+            if (percentData[idToState[d.id]] == 0) return "#ffffff";
+            else if (pviData[idToState[d.id]] < 0) return blueScale(percentData[idToState[d.id]]);
+            else if (pviData[idToState[d.id]] > 0) return redScale(percentData[idToState[d.id]]);
+            else return "gray";
+          });
+        }
+        else if (optionControl === "vaccineValue") {
+          state.style("fill", d => {
+            if (percentData[idToState[d.id]] < num) return "#ffffff";
+            else return colorScale(percentData[idToState[d.id]]);
+          });
+        }
+
       }
-      updateFilter(28);
+      updateFilter(23);
       const input = document.querySelector('input');
       const log = document.getElementById('volume');
       input.addEventListener('input', updateValue);
