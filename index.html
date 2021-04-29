@@ -826,26 +826,7 @@
           d3.select("svg#map-legend-red").attr("visibility", "hidden");
           d3.select("svg#map-legend-blue").attr("visibility", "hidden");
           // update color
-          state.style("fill", d => {
-            let pviValue = pviData[idToState[d.id]];
-            if (pviValue <= -10) {
-              return "#B03A2E";
-            } else if (pviValue <= -3) {
-              return "#E74C3C";
-            }
-            else if (pviValue < 0) {
-              return "#F5B7B1";
-            } else if (pviValue >= 17) {
-              return "#2874A6";
-            } else if (pviValue >= 11) {
-              return "#3498DB";
-            } else if (pviValue > 0) {
-              return "#AED6F1";
-            }
-            else {
-              return "#ABB2B9";
-            }
-          })
+          updateFilter(numControl);
         }
         else if (option === "vaccineValue") {
           optionControl = "vaccineValue";
@@ -900,7 +881,7 @@
           document.querySelector('div#redPercent').innerText = `Percent of total Republican states: ${format(100 * redNum / redNumTotal)} %`;
           document.querySelector('b#range').innerText = `with vaccination rate over ${num}%`;
         })
-        // update color for two cases
+        // update color based on options of map
         // case 1
         if (optionControl === "vaccineByPolitic") {
           state.style("fill", d => {
@@ -917,6 +898,30 @@
             if (percentData[idToState[d.id]] < num) return "#ffffff";
             else return colorScale(percentData[idToState[d.id]]);
           });
+        }
+        // case 3
+        else if (optionControl === "pviValue") {
+          state.style("fill", d => {
+            if (percentData[idToState[d.id]] < num) return "#ffffff";
+            let pviValue = pviData[idToState[d.id]];
+            if (pviValue <= -10) {
+              return "#B03A2E";
+            } else if (pviValue <= -3) {
+              return "#E74C3C";
+            }
+            else if (pviValue < 0) {
+              return "#F5B7B1";
+            } else if (pviValue >= 17) {
+              return "#2874A6";
+            } else if (pviValue >= 11) {
+              return "#3498DB";
+            } else if (pviValue > 0) {
+              return "#AED6F1";
+            }
+            else {
+              return "#ABB2B9";
+            }
+          })
         }
 
       }
