@@ -908,18 +908,18 @@
             if (percentData[idToState[d.id]] < num) return "#ffffff";
             let pviValue = pviData[idToState[d.id]];
             if (pviValue <= -10) {
-              return "#B03A2E";
+              return "#2874A6";
             } else if (pviValue <= -3) {
-              return "#E74C3C";
+              return "#3498DB";
             }
             else if (pviValue < 0) {
-              return "#F5B7B1";
-            } else if (pviValue >= 17) {
-              return "#2874A6";
-            } else if (pviValue >= 11) {
-              return "#3498DB";
-            } else if (pviValue > 0) {
               return "#AED6F1";
+            } else if (pviValue >= 17) {
+              return "#B03A2E";
+            } else if (pviValue >= 11) {
+              return "#E74C3C";
+            } else if (pviValue > 0) {
+              return "#F5B7B1";
             }
             else {
               return "#ABB2B9";
