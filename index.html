@@ -528,8 +528,8 @@
 
       }
       // Event handler 2: Update mouse over for map
-      let tooltipWidth = 130;
-      let tooltipHeight = 60;
+      let tooltipWidth = 110;
+      let tooltipHeight = 40;
       let tooltip = map.append("g")
         .attr("class", "tooltip")
         .attr("visibility", "hidden");
@@ -552,12 +552,12 @@
         .attr("alignment-baseline", "hanging")
         .attr("x", 0)
         .attr("y", 22);
-      let txt3 = tooltip.append("text")
-        .attr("fill", "white")
-        .attr("text-anchor", "middle")
-        .attr("alignment-baseline", "hanging")
-        .attr("x", 0)
-        .attr("y", 42);
+      // let txt3 = tooltip.append("text")
+      //   .attr("fill", "white")
+      //   .attr("text-anchor", "middle")
+      //   .attr("alignment-baseline", "hanging")
+      //   .attr("x", 0)
+      //   .attr("y", 42);
       let momesh = map.append("path")
         .attr("class", "mouseover outline")
         .attr("d", "");
@@ -571,8 +571,8 @@
         var mo = topojson.mesh(us, us.objects.states, function (a, b) { return a.id === stateID || b.id === stateID; });
         momesh.datum(mo).attr("d", path)
         txt.text(idToState[stateID]);
-        txt2.text(`pvi value: ${pviData[idToState[stateID]]}`);
-        txt3.text(`vaccine rate: ${percentData[idToState[stateID]]}`)
+        // txt2.text(`pvi value: ${pviData[idToState[stateID]]}`);
+        txt2.text(`vaccine rate: ${format(percentData[idToState[stateID]])}`)
         let bounds = path.bounds(state.datum());
         let xPos = (bounds[0][0] + bounds[1][0]) / 2.0;
         let yPos = bounds[1][1];
