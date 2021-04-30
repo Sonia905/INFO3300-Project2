@@ -73,6 +73,7 @@
   }
 
   .my-legend .legend-title {
+    position: relative;
     text-align: left;
     margin-bottom: 8px;
     font-weight: bold;
@@ -80,27 +81,30 @@
   }
 
   .my-legend .legend-scale ul {
+    position: relative;
+    display: block;
     margin: 0;
     padding: 0;
-    float: left;
-    list-style: none;
+    /* float: left; */
+    /* list-style: none; */
   }
 
-  .my-legend .legend-scale ul li {
-    display: block;
-    float: left;
-    width: 142px;
+  .my-legend .legend-scale li {
+    white-space: nowrap
+    position: relative;
+    display: inline-block;
+    /* float: left; */
+    width: 135px;
     margin-bottom: 6px;
     text-align: center;
-    font-size: 80%;
-    list-style: none;
+    /* list-style: none; */
   }
 
   .my-legend ul.legend-labels li span {
-    display: block;
+    display: inline-block;
     float: left;
     height: 15px;
-    width: 142px;
+    width: 135px;
   }
 
   .my-legend a {
@@ -221,16 +225,14 @@
       </select>
     </div>
   </div>
-  <!-- <br>
-  <a href="#choropleth">Click here to see the content below.</a>
-  <br> -->
 
   <div style="text-align:center;">
     <svg id="chart" height="340" width="1000" style="margin-top:20px; margin-bottom:30px">
     </svg>
   </div>
   <div class="relative">
-    <div class='my-legend'>
+    <svg id="lolipop-legend" width="1000" height="50" style="background: #fff; margin-bottom:0px"></svg>
+    <!-- <div class='my-legend'>
       <div class='legend-title'>Cook Partisan Voting Index Color Scale</div>
       <div class='legend-scale'>
         <ul class='legend-labels'>
@@ -243,7 +245,7 @@
           <li><span style='background:#2874A6;'></span> greater than 16 </li>
         </ul>
       </div>
-    </div>
+    </div> -->
   </div>
   <div class="relative">
     <div id="pulldown-bar2">
@@ -465,6 +467,16 @@
         else return "gray";
       });
       // create red and blue legend
+      const Loliscale = d3.scaleThreshold().domain([-9, -3,-1,1,10,16,25]).range(["#2874A6","#3498DB","#AED6F1","#ABB2B9","#F5B7B1","#E74C3C","#B03A2E"])
+      //const Loliscale = d3.scaleThreshold().domain(Object.values(pviData)).range(["#2874A6","#3498DB","#AED6F1","#ABB2B9","#F5B7B1","#E74C3C","#B03A2E"])
+      const lolipopLine = d3.select("svg#lolipop-legend").append("g")
+        .attr("class", "legendLinear");
+      const legendLoli = d3.legendColor()
+        .shapeWidth(142)
+        .cells(10)
+        .orient('horizontal')
+        .scale(Loliscale);
+      lolipopLine.call(legendLoli);
       const blueLine = d3.select("svg#map-legend-blue").append("g")
         .attr("class", "legendLinear");
       const legendBlue = d3.legendColor()
@@ -691,7 +703,7 @@
         var data;
         if (option === "sortPVI") {
           merge_data.sort((a, b) => d3.descending(a['pvi'], b['pvi']))
-          // merge_data.sort((a, b) => d3.ascending(a['Percent of Total Pop with at least One Dose by State of Residence'], b['Percent of Total Pop with at least One Dose by State of Residence']));
+          //merge_data.sort((a, b) => d3.ascending(a['Percent of Total Pop with at least One Dose by State of Residence'], b['Percent of Total Pop with at least One Dose by State of Residence']));
           data = merge_data;
           console.log(merge_data);
           dosesExten = d3.extent(data, d => d['Percent of Total Pop with at least One Dose by State of Residence']);
@@ -718,7 +730,7 @@
           // console.log(pviExtent)
           // const avgPvi = 0; //d3.mean(merge_data, d => d['pvi']);
           // const pviDist = Math.max(Math.abs(pviExtent[0] - avgPvi), Math.abs(pviExtent[1] - avgPvi));
-
+          //
           // const adjustedPviExtent = [avgPvi - pviDist, avgPvi + pviDist];
           // const pviScale = d3.scaleLinear().domain(adjustedPviExtent).range([chartHeight, 0]);
           // data = merge_data;
@@ -729,7 +741,7 @@
           // bottomAxisG.transition().call(bottomAxis);
           // leftAxis.scale(pviScale).tickFormat(d3.format("~f"));
           // leftAxisG.transition().call(leftAxis);
-
+          //
           // midline.attr("x1", 0).attr("x2", chartWidth + 10)
           //   .attr("y1", pviScale(avgPvi)).attr("y2", pviScale(avgPvi));
           // circles.attr("transform", d => `translate(${codeScale(d.Code)},${pviScale(d['pvi'])})`);
