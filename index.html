@@ -90,8 +90,7 @@
   }
 
   .my-legend .legend-scale li {
-    white-space: nowrap
-    position: relative;
+    white-space: nowrap position: relative;
     display: inline-block;
     /* float: left; */
     width: 135px;
@@ -467,7 +466,7 @@
         else return "gray";
       });
       // create red and blue legend
-      const Loliscale = d3.scaleThreshold().domain([-9, -3,-1,1,10,16,25]).range(["#2874A6","#3498DB","#AED6F1","#ABB2B9","#F5B7B1","#E74C3C","#B03A2E"])
+      const Loliscale = d3.scaleThreshold().domain([-9, -3, -1, 1, 10, 16, 25]).range(["#2874A6", "#3498DB", "#AED6F1", "#ABB2B9", "#F5B7B1", "#E74C3C", "#B03A2E"])
       //const Loliscale = d3.scaleThreshold().domain(Object.values(pviData)).range(["#2874A6","#3498DB","#AED6F1","#ABB2B9","#F5B7B1","#E74C3C","#B03A2E"])
       const lolipopLine = d3.select("svg#lolipop-legend").append("g")
         .attr("class", "legendLinear");
@@ -595,8 +594,8 @@
       // Mouse over handling
       circles.on("mouseover", function (d) {
         // invoke lollipop chart handler & sizing circle
-        if (optionLollipop !== "sortPVI")
-          mouseover.attr("visibility", "");
+        // if (optionLollipop !== "sortPVI")
+        mouseover.attr("visibility", "");
         d3.select(this).transition().duration(200)
           .attr("r", 10)
           .attr("stroke-width", 4);
@@ -628,8 +627,8 @@
       });
       rec.on("mouseover", function (d) {
         // invoke lollipop chart handler & sizing circle
-        if (optionLollipop !== "sortPVI")
-          mouseover.attr("visibility", "");
+        // if (optionLollipop !== "sortPVI")
+        mouseover.attr("visibility", "");
         updateMouseover(d3.select(this).datum())
         let stateName = d3.select(this).datum().State;
         let circleTarget = d3.select(`circle#${stateName}`);
@@ -666,8 +665,8 @@
         // invoke map handler
         mouseEntersPlot(this);
         // invoke lollipop chart handler & sizing circle
-        if (optionLollipop !== "sortPVI")
-          mouseover.attr("visibility", "");
+        // if (optionLollipop !== "sortPVI")
+        mouseover.attr("visibility", "");
         let ID = d3.select(this).datum().id;
         circles.each(function () {
           let element = d3.select(this).datum()
