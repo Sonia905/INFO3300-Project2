@@ -459,6 +459,8 @@
       const redScale = d3.scaleLinear().domain(percentExtent).range(["#fef7f7", "#B03A2E"]);
       // one scale for option=vaccineValue
       const colorScale = d3.scaleQuantile().domain(Object.values(percentData)).range(["#fff", "#d1e8ed", "#adc2da", "#8879b3", "#762b80"])
+      // lolipop pvi scale
+      const Loliscale = d3.scaleThreshold().domain([-9, -3, -1, 1, 10, 16, 25]).range(["#2874A6", "#3498DB", "#AED6F1", "#ABB2B9", "#F5B7B1", "#E74C3C", "#B03A2E"])
       state.style("fill", d => {
         if (percentData[idToState[d.id]] == 0) return "#ffffff";
         else if (pviData[idToState[d.id]] < 0) return blueScale(percentData[idToState[d.id]]);
@@ -466,7 +468,6 @@
         else return "gray";
       });
       // create red and blue legend
-      const Loliscale = d3.scaleThreshold().domain([-9, -3, -1, 1, 10, 16, 25]).range(["#2874A6", "#3498DB", "#AED6F1", "#ABB2B9", "#F5B7B1", "#E74C3C", "#B03A2E"])
       //const Loliscale = d3.scaleThreshold().domain(Object.values(pviData)).range(["#2874A6","#3498DB","#AED6F1","#ABB2B9","#F5B7B1","#E74C3C","#B03A2E"])
       const lolipopLine = d3.select("svg#lolipop-legend").append("g")
         .attr("class", "legendLinear");
@@ -474,6 +475,7 @@
         .shapeWidth(142)
         .cells(10)
         .orient('horizontal')
+        .labels(d3.legendHelpers.thresholdLabels)
         .scale(Loliscale);
       lolipopLine.call(legendLoli);
       const blueLine = d3.select("svg#map-legend-blue").append("g")
