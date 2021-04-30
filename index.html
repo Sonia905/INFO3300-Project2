@@ -217,7 +217,7 @@
         <option value="sortDosePrecent" selected>Sort by Precent of Total Pop with at least One Dose</option>
         <option value="sortDosePrecentTwo">Sort by Precent of Total Pop fully Vaccinated</option>
         <option value="sortPVI">Sort by Cook Partisan Voting Index</option>
-        <option value="sortAlpha">Sort by Alphabet</option>
+        <!-- <option value="sortAlpha">Sort by Alphabet</option> -->
       </select>
     </div>
   </div>
@@ -568,7 +568,7 @@
         var mo = topojson.mesh(us, us.objects.states, function (a, b) { return a.id === stateID || b.id === stateID; });
         momesh.datum(mo).attr("d", path)
         txt.text(idToState[stateID]);
-        txt2.text(`vaccine rate: ${format(percentData[idToState[stateID]])}`)
+        txt2.text(`vaccine rate: ${format(percentData[idToState[stateID]])}%`)
         let bounds = path.bounds(state.datum());
         let xPos = (bounds[0][0] + bounds[1][0]) / 2.0;
         let yPos = bounds[1][1];
@@ -583,7 +583,8 @@
       // Mouse over handling
       circles.on("mouseover", function (d) {
         // invoke lollipop chart handler & sizing circle
-        mouseover.attr("visibility", "");
+        if (optionLollipop !== "sortPVI")
+          mouseover.attr("visibility", "");
         d3.select(this).transition().duration(200)
           .attr("r", 10)
           .attr("stroke-width", 4);
@@ -615,7 +616,8 @@
       });
       rec.on("mouseover", function (d) {
         // invoke lollipop chart handler & sizing circle
-        mouseover.attr("visibility", "");
+        if (optionLollipop !== "sortPVI")
+          mouseover.attr("visibility", "");
         updateMouseover(d3.select(this).datum())
         let stateName = d3.select(this).datum().State;
         let circleTarget = d3.select(`circle#${stateName}`);
@@ -652,7 +654,8 @@
         // invoke map handler
         mouseEntersPlot(this);
         // invoke lollipop chart handler & sizing circle
-        mouseover.attr("visibility", "");
+        if (optionLollipop !== "sortPVI")
+          mouseover.attr("visibility", "");
         let ID = d3.select(this).datum().id;
         circles.each(function () {
           let element = d3.select(this).datum()
@@ -680,66 +683,89 @@
         })
       });
 
-
+      let optionLollipop = "sortDosePrecent";
       // Dealing with sorting options for lollipop chart
       d3.select("#sort-select").on("change", function () {
-
         var option = d3.select(this).property("value")
+        optionLollipop = option;
         var data;
         if (option === "sortPVI") {
-          merge_data.sort((a, b) => d3.ascending(a['pvi'], b['pvi']))
-          const pviExtent = d3.extent(merge_data, d => d['pvi']);
-          console.log(pviExtent)
-          const avgPvi = 0; //d3.mean(merge_data, d => d['pvi']);
-          const pviDist = Math.max(Math.abs(pviExtent[0] - avgPvi), Math.abs(pviExtent[1] - avgPvi));
-
-          const adjustedPviExtent = [avgPvi - pviDist, avgPvi + pviDist];
-          const pviScale = d3.scaleLinear().domain(adjustedPviExtent).range([chartHeight, 0]);
+          merge_data.sort((a, b) => d3.descending(a['pvi'], b['pvi']))
+          // merge_data.sort((a, b) => d3.ascending(a['Percent of Total Pop with at least One Dose by State of Residence'], b['Percent of Total Pop with at least One Dose by State of Residence']));
           data = merge_data;
-          console.log(merge_data)
+          console.log(merge_data);
+          dosesExten = d3.extent(data, d => d['Percent of Total Pop with at least One Dose by State of Residence']);
+          console.log(dosesExten)
+          const dosesScale = d3.scaleLinear().domain(dosesExten).range([chartHeight, 0]);
           newCodes = d3.map(data, d => d.Code)
           codeScale.domain(newCodes);
           bottomAxis.scale(codeScale);
-          bottomAxisG.transition().call(bottomAxis);
-          leftAxis.scale(pviScale).tickFormat(d3.format("~f"));
+          bottomAxisG.transition().call(bottomAxis)
+
+          const avgDose = d3.mean(merge_data, d => d['Percent of Total Pop with at least One Dose by State of Residence']);
+          leftAxis.scale(dosesScale).tickFormat(function (d) { return d + "%"; });
           leftAxisG.transition().call(leftAxis);
-
           midline.attr("x1", 0).attr("x2", chartWidth + 10)
-            .attr("y1", pviScale(avgPvi)).attr("y2", pviScale(avgPvi));
-          circles.attr("transform", d => `translate(${codeScale(d.Code)},${pviScale(d['pvi'])})`);
+            .attr("y1", dosesScale(avgDose)).attr("y2", dosesScale(avgDose));
+          circles.attr("transform", d => `translate(${codeScale(d.Code)},${dosesScale(d['Percent of Total Pop with at least One Dose by State of Residence'])})`);
           rec.attr("x", d => codeScale(d.Code) - 10)
-            .attr("y", d => Math.min(pviScale(avgPvi), pviScale(d['pvi'])))
-            .attr("height", d => Math.abs(pviScale(avgPvi) - pviScale(d['pvi'])))
+            .attr("y", d => Math.min(dosesScale(avgDose), dosesScale(d['Percent of Total Pop with at least One Dose by State of Residence'])))
+            .attr("height", d => Math.abs(dosesScale(avgDose) - dosesScale(d['Percent of Total Pop with at least One Dose by State of Residence'])))
           lines.attr("x1", d => codeScale(d.Code)).attr("x2", d => codeScale(d.Code))
-            .attr("y1", pviScale(avgPvi)).attr("y2", d => pviScale(d['pvi']));
-        }
-        if (option === "sortAlpha") {
-          merge_data.sort((a, b) => d3.ascending(a['State'], b['State']));
-          data = merge_data;
-          const pviExtent = d3.extent(merge_data, d => d['pvi']);
-          console.log(pviExtent)
-          const avgPvi = 0; //d3.mean(merge_data, d => d['pvi']);
-          const pviDist = Math.max(Math.abs(pviExtent[0] - avgPvi), Math.abs(pviExtent[1] - avgPvi));
+            .attr("y1", dosesScale(avgDose)).attr("y2", d => dosesScale(d['Percent of Total Pop with at least One Dose by State of Residence']));
 
-          const adjustedPviExtent = [avgPvi - pviDist, avgPvi + pviDist];
-          const pviScale = d3.scaleLinear().domain(adjustedPviExtent).range([chartHeight, 0]);
-          console.log(merge_data)
-          newCodes = d3.map(data, d => d.Code)
-          codeScale.domain(newCodes);
-          bottomAxis.scale(codeScale);
-          bottomAxisG.transition().call(bottomAxis);
-          leftAxis.scale(pviScale).tickFormat(d3.format("~f"));
-          leftAxisG.transition().call(leftAxis);
+          // const pviExtent = d3.extent(merge_data, d => d['pvi']);
+          // console.log(pviExtent)
+          // const avgPvi = 0; //d3.mean(merge_data, d => d['pvi']);
+          // const pviDist = Math.max(Math.abs(pviExtent[0] - avgPvi), Math.abs(pviExtent[1] - avgPvi));
 
-          midline.attr("x1", 0).attr("x2", chartWidth + 10)
-            .attr("y1", pviScale(avgPvi)).attr("y2", pviScale(avgPvi));
-          circles.attr("transform", d => `translate(${codeScale(d.Code)},${pviScale(d['pvi'])})`);
-          rec.attr("x", d => codeScale(d.Code) - 10)
-            .attr("y", d => Math.min(pviScale(avgPvi), pviScale(d['pvi'])))
-            .attr("height", d => Math.abs(pviScale(avgPvi) - pviScale(d['pvi'])))
-          lines.attr("x1", d => codeScale(d.Code)).attr("x2", d => codeScale(d.Code))
-            .attr("y1", pviScale(avgPvi)).attr("y2", d => pviScale(d['pvi']));
+          // const adjustedPviExtent = [avgPvi - pviDist, avgPvi + pviDist];
+          // const pviScale = d3.scaleLinear().domain(adjustedPviExtent).range([chartHeight, 0]);
+          // data = merge_data;
+          // console.log(merge_data)
+          // newCodes = d3.map(data, d => d.Code)
+          // codeScale.domain(newCodes);
+          // bottomAxis.scale(codeScale);
+          // bottomAxisG.transition().call(bottomAxis);
+          // leftAxis.scale(pviScale).tickFormat(d3.format("~f"));
+          // leftAxisG.transition().call(leftAxis);
+
+          // midline.attr("x1", 0).attr("x2", chartWidth + 10)
+          //   .attr("y1", pviScale(avgPvi)).attr("y2", pviScale(avgPvi));
+          // circles.attr("transform", d => `translate(${codeScale(d.Code)},${pviScale(d['pvi'])})`);
+          // rec.attr("x", d => codeScale(d.Code) - 10)
+          //   .attr("y", d => Math.min(pviScale(avgPvi), pviScale(d['pvi'])))
+          //   .attr("height", d => Math.abs(pviScale(avgPvi) - pviScale(d['pvi'])))
+          // lines.attr("x1", d => codeScale(d.Code)).attr("x2", d => codeScale(d.Code))
+          //   .attr("y1", pviScale(avgPvi)).attr("y2", d => pviScale(d['pvi']));
         }
+        // if (option === "sortAlpha") {
+        //   merge_data.sort((a, b) => d3.ascending(a['State'], b['State']));
+        //   data = merge_data;
+        //   const pviExtent = d3.extent(merge_data, d => d['pvi']);
+        //   console.log(pviExtent)
+        //   const avgPvi = 0; //d3.mean(merge_data, d => d['pvi']);
+        //   const pviDist = Math.max(Math.abs(pviExtent[0] - avgPvi), Math.abs(pviExtent[1] - avgPvi));
+
+        //   const adjustedPviExtent = [avgPvi - pviDist, avgPvi + pviDist];
+        //   const pviScale = d3.scaleLinear().domain(adjustedPviExtent).range([chartHeight, 0]);
+        //   console.log(merge_data)
+        //   newCodes = d3.map(data, d => d.Code)
+        //   codeScale.domain(newCodes);
+        //   bottomAxis.scale(codeScale);
+        //   bottomAxisG.transition().call(bottomAxis);
+        //   leftAxis.scale(pviScale).tickFormat(d3.format("~f"));
+        //   leftAxisG.transition().call(leftAxis);
+
+        //   midline.attr("x1", 0).attr("x2", chartWidth + 10)
+        //     .attr("y1", pviScale(avgPvi)).attr("y2", pviScale(avgPvi));
+        //   circles.attr("transform", d => `translate(${codeScale(d.Code)},${pviScale(d['pvi'])})`);
+        //   rec.attr("x", d => codeScale(d.Code) - 10)
+        //     .attr("y", d => Math.min(pviScale(avgPvi), pviScale(d['pvi'])))
+        //     .attr("height", d => Math.abs(pviScale(avgPvi) - pviScale(d['pvi'])))
+        //   lines.attr("x1", d => codeScale(d.Code)).attr("x2", d => codeScale(d.Code))
+        //     .attr("y1", pviScale(avgPvi)).attr("y2", d => pviScale(d['pvi']));
+        // }
         else if (option === "sortTotalDose") {
           merge_data.sort((a, b) => d3.ascending(a['Total Doses Delivered'], b['Total Doses Delivered']));
           data = merge_data;
