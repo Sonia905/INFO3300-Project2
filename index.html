@@ -1064,8 +1064,8 @@
           }
           document.querySelector('div#blueNum').innerText = `Number of Democratic states: ${blueNum}`;
           document.querySelector('div#redNum').innerText = `Number of Republican states: ${redNum}`;
-          document.querySelector('div#bluePercent').innerText = `Percent of total Democratic states: ${format(100 * blueNum / blueNumTotal)} %`;
-          document.querySelector('div#redPercent').innerText = `Percent of total Republican states: ${format(100 * redNum / redNumTotal)} %`;
+          document.querySelector('div#bluePercent').innerText = `Percent of Democratic states: ${format(100 * blueNum / (blueNumTotal + redNumTotal))} %`;
+          document.querySelector('div#redPercent').innerText = `Percent of Republican states: ${format(100 * redNum / (redNumTotal + blueNumTotal))} %`;
           document.querySelector('b#range').innerText = `with vaccination rate over ${num}%`;
         })
         // update color based on options of map
