@@ -29,7 +29,11 @@
     fill: none;
     pointer-events: all;
   }
-
+  .question_rec {
+    fill: none;
+    pointer-events: all;
+    stroke: white;
+  }
   line.avgline {
     stroke: black;
     stroke-width: 2px;
@@ -64,7 +68,9 @@
     stroke-width: 3px;
     pointer-events: none;
   }
-
+  .question_mark{
+    pointer-events: all;
+  }
   .graticule {
     fill: none;
     stroke: grey;
@@ -230,7 +236,7 @@
         <option value="sortTotalDose">Sort by Total Doses Delivered (Y-axis)</option>
         <option value="sortDosePrecent" selected>Sort by Precent of Total Pop with at least One Dose (Y-axis)</option>
         <option value="sortDosePrecentTwo">Sort by Precent of Total Pop fully Vaccinated (Y-axis)</option>
-        <option value="sortPVI">Sort by Cook Partisan Voting Index (Y-axis)</option>
+        <option value="sortPVI">Sort X-axis by Cook Partisan Voting Index (Y-axis least One Dose)</option>
         <!-- <option value="sortAlpha">Sort by Alphabet</option> -->
       </select>
     </div>
@@ -519,8 +525,10 @@
         .attr("height", 350)
         .attr("width", 300);
       const textbox = mouseover.append("g").attr("transform", "translate(10,10)");
-      textbox.append("text").text("Hover a circle")
-        .attr("x", 0).attr("y", 20).attr("font-size","25px");
+      textbox.append("text").text("Hover a Circle")
+        .attr("x", 60).attr("y", 100).attr("font-size","25px");
+      textbox.append("text").text("to see more details")
+        .attr("x", 40).attr("y", 150).attr("font-size","25px");
       const format = d3.format(',d');
       function updateMouseover(d) {
         textbox.html('');
@@ -544,6 +552,61 @@
         let twoprenText = `${format(d['Percent of Total Pop Fully Vaccinated by State of Residence'])}`+"%";
         //let maxWidth = Math.max(stringLen(stateName), stringLen(totalD), stringLen(onepren), stringLen(twopren))
         frame.attr("width", 300);
+        var imgs = textbox.selectAll("image").data([0]);
+        imgs.enter()
+            .append("svg:image")
+            .attr("class","question_mark")
+            .attr("xlink:href", "question-mark-icon.png")
+            .attr("x", "86")
+            .attr("y", "48")
+            .attr("width", "15")
+            .attr("height", "15");
+        var rec_for_hhover = textbox.append("rect")
+          .attr("class","question_rec")
+          .attr("x",86)
+          .attr("y", 48)
+          .attr("width", 15)
+          .attr("height", 15)
+          .attr("visibility","hidden");
+        const question_hover = loli_hover.append("g").attr("class","mouseover")
+                                         .attr("transform", "translate(" + 40 + "," + 95 + ")");
+        const question_frame = question_hover.append("rect").attr("class","frame")
+                               .attr("x", 0).attr("y", 0)
+                               .attr("rx", 5).attr("ry", 5)
+                               .attr("fill","white")
+                               .attr("height", 210);
+        const question_explain = question_hover.append("g").attr("transform","translate(10,10)");
+        function updateQuestion() {
+          question_explain.html('');
+          question_frame.attr("width",260);
+          question_explain.append("text").text("The Cook Partisan Voting Index")
+                 .attr("x", 0).attr("y", 10);
+          question_explain.append("text").text("(abbreviated CPVI or PVI)")
+                 .attr("x", 0).attr("y", 30).attr("font-weight",900);
+          question_explain.append("text").text("United States congressional district")
+                 .attr("x", 0).attr("y", 80);
+          question_explain.append("text").text("is a measurement of how strongly a")
+                 .attr("x", 0).attr("y", 60);
+          question_explain.append("text").text("or state leans toward the Democratic")
+                 .attr("x", 0).attr("y", 100);
+          question_explain.append("text").text(" or Republican Party, compared to the")
+                 .attr("x", 0).attr("y", 120);
+          question_explain.append("text").text("nation as a whole, based on how that")
+                 .attr("x", 0).attr("y", 140);
+          question_explain.append("text").text("district or state voted in the previous")
+                 .attr("x", 0).attr("y", 160);
+          question_explain.append("text").text("two Presidential elections.")
+                 .attr("x", 0).attr("y", 180);
+                //  compared to the nation as a whole, based on how that district or state voted in the previous two Presidential elections
+        }
+        rec_for_hhover.on("mouseover", function(d) {
+          question_hover.attr("visibility","");
+          updateQuestion()
+        });
+
+        rec_for_hhover.on("mouseout", function() {
+          question_hover.attr("visibility","hidden");
+        });
 
         textbox.append("text").text(stateName)
           .attr("x", 0).attr("y", 20).attr("font-size","25px");
@@ -585,6 +648,10 @@
                     .startAngle(0)
                     .innerRadius(0)
                     .outerRadius(66);
+        var arc2 = d3.arc()
+                    .startAngle(2 * Math.PI*0.01)
+                    .innerRadius(0)
+                    .outerRadius(60);
         var meter = textbox.append("g")
                            .attr("transform", "translate(" + 130 + "," + 260 + ")");
         meter.append("path")
@@ -594,12 +661,12 @@
             .attr("class", "foreground");
         var foreground2 = meter.append("path")
             .attr("class", "foreground2");
-        foreground.attr("d", arc.endAngle(twoPi * (onepren / 100)));
-        foreground2.attr("d", arc.endAngle(twoPi * (twopren / 100)));
+        foreground.attr("d", arc.endAngle(twoPi * ((onepren+0.01) / 100)));
+        foreground2.attr("d", arc2.endAngle(twoPi * ((twopren+0.01) / 100)));
         textbox.append("text").text(oneprenText)
-          .attr("x", 150).attr("y", 270).attr("font-size","12px");
+          .attr("x", 200).attr("y", 270).attr("font-size","12px");
         textbox.append("text").text(twoprenText)
-          .attr("x", 150).attr("y", 230).attr("font-size","12px");
+          .attr("x", 170).attr("y", 205).attr("font-size","12px");
       }
       // Event handler 2: Update mouse over for map
       let tooltipWidth = 130;
