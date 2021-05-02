@@ -29,11 +29,13 @@
     fill: none;
     pointer-events: all;
   }
+
   .question_rec {
     fill: none;
     pointer-events: all;
     stroke: white;
   }
+
   line.avgline {
     stroke: black;
     stroke-width: 2px;
@@ -68,16 +70,20 @@
     stroke-width: 3px;
     pointer-events: none;
   }
-  .question_mark{
+
+  .question_mark {
     pointer-events: all;
   }
+
   .graticule {
     fill: none;
     stroke: grey;
     stroke-width: 1px;
   }
 
-  body {margin:0;}
+  body {
+    margin: 0;
+  }
 
   .navbar {
     overflow: hidden;
@@ -88,13 +94,16 @@
     z-index: 999;
     height: 70px;
   }
+
   .navbar-right {
     float: right;
   }
+
   .navbar a.logo {
     font-size: 25px;
     font-weight: bold;
   }
+
   .navbar a {
     float: left;
     display: block;
@@ -118,15 +127,17 @@
     margin-top: 60px;
   }
 
-  div.part1{
-      background: white;
-    }
+  div.part1 {
+    background: white;
+  }
+
   div.relative {
     position: relative;
     left: 10%;
     right: 10%;
     width: 80%;
   }
+
   div.decription {
     font-size: 17px;
     border-style: solid;
@@ -138,6 +149,7 @@
     border-radius: 18px;
     border-width: thin;
   }
+
   input {
     display: inline-block;
     vertical-align: top;
@@ -169,14 +181,17 @@
   }
 
   .foreground {
-      fill: #FDE79A;
+    fill: #FDE79A;
   }
+
   .foreground2 {
-      fill: #FEC26D;
+    fill: #FEC26D;
   }
+
   .pie-background {
     fill: lightgrey;
   }
+
   .container-float {
     position: relative;
     width: 880px;
@@ -206,7 +221,9 @@
     clear: both;
   }
 
-
+  input {
+    margin-bottom: 0;
+  }
 </style>
 
 <body>
@@ -220,45 +237,48 @@
 
 
   <div class="part1">
-      <div class="main">
-  <div class="relative">
-    <br>
-    <div class = "decription" id = "jumper">
-      These diagrams reprsent the states' vaccination rates and political inclinations at the same time, in order to show
-      the potential relationship between these factors. The color red represents Republican States and blue represents
-      Democratic states, while grey represent battleground states, based on the Cook PartisianVoting Index.
-      The saturation of the colors represent the relative rate of vaccination, with deeper colors meaning
-      higher number or percentage vaccinated.
-    </div>
-    <br>
-    <div id="pulldown-bar">
-      <select id="sort-select" style="width:450px;">
-        <option value="sortTotalDose">Sort by Total Doses Delivered (Y-axis)</option>
-        <option value="sortDosePrecent" selected>Sort by Precent of Total Pop with at least One Dose (Y-axis)</option>
-        <option value="sortDosePrecentTwo">Sort by Precent of Total Pop fully Vaccinated (Y-axis)</option>
-        <option value="sortPVI">Sort X-axis by Cook Partisan Voting Index (Y-axis least One Dose)</option>
-        <!-- <option value="sortAlpha">Sort by Alphabet</option> -->
-      </select>
-    </div>
-  </div>
+    <div class="main">
+      <div class="relative">
+        <br>
+        <div class="decription" id="jumper">
+          These diagrams reprsent the states' vaccination rates and political inclinations at the same time, in order to
+          show
+          the potential relationship between these factors. The color red represents Republican States and blue
+          represents
+          Democratic states, while grey represent battleground states, based on the Cook PartisianVoting Index.
+          The saturation of the colors represent the relative rate of vaccination, with deeper colors meaning
+          higher number or percentage vaccinated.
+        </div>
+        <br>
+        <div id="pulldown-bar">
+          <select id="sort-select" style="width:450px;">
+            <option value="sortTotalDose">Sort by Total Doses Delivered (Y-axis)</option>
+            <option value="sortDosePrecent" selected>Sort by Precent of Total Pop with at least One Dose (Y-axis)
+            </option>
+            <option value="sortDosePrecentTwo">Sort by Precent of Total Pop fully Vaccinated (Y-axis)</option>
+            <option value="sortPVI">Sort X-axis by Cook Partisan Voting Index (Y-axis least One Dose)</option>
+            <!-- <option value="sortAlpha">Sort by Alphabet</option> -->
+          </select>
+        </div>
+      </div>
 
-  <div class="lolipop-float">
-    <div class="first-loli">
-    <svg id="chart" height="340" width="950" style="margin-top:20px; margin-bottom:30px">
-    </svg>
+      <div class="lolipop-float">
+        <div class="first-loli">
+          <svg id="chart" height="340" width="950" style="margin-top:10px; margin-bottom:10px">
+          </svg>
+        </div>
+        <div class="second-loli">
+          <svg id="loli-hover" height="400" width="400" style="margin-top:10px; margin-bottom:10px">
+        </div>
+      </div>
+      <br>
+      <br>
+      <div class="relative">
+        <div class='legend-title legend1'>Cook Partisan Voting Index Color Scale</div>
+        <svg id="lolipop-legend" width="1500" height="50" style="background: #fff; margin-bottom:0px"></svg>
+      </div>
     </div>
-    <div class="second-loli">
-      <svg id="loli-hover" height="400" width="400" style="margin-top:20px; margin-bottom:30px">
-    </div>
   </div>
-  <br>
-  <br>
-  <div style="margin-left: 50px;">
-    <div class='legend-title legend2'>Cook Partisan Voting Index Color Scale</div>
-    <svg id="lolipop-legend" width="1500" height="50" style="background: #fff; margin-bottom:0px"></svg>
-  </div>
-  </div>
-</div>
   <div class="relative">
     <div id="pulldown-bar2">
       <select id="options" style="width:400px;">
@@ -271,7 +291,7 @@
   </div>
   <div class="container-float">
     <div class="first">
-      <svg id="choropleth" height="300" width="550" style="background: #fff; margin-top:10px">
+      <svg id="choropleth" height="300" width="550" style="background: #fff; margin-top:0px">
       </svg>
     </div>
 
@@ -521,14 +541,14 @@
       const frame = mouseover.append("rect").attr("class", "frame")
         .attr("x", 0).attr("y", 0)
         .attr("rx", 5).attr("ry", 5)
-        .attr("fill","white")
+        .attr("fill", "white")
         .attr("height", 350)
         .attr("width", 300);
       const textbox = mouseover.append("g").attr("transform", "translate(10,10)");
       textbox.append("text").text("Hover a Circle")
-        .attr("x", 60).attr("y", 100).attr("font-size","25px");
+        .attr("x", 60).attr("y", 100).attr("font-size", "25px");
       textbox.append("text").text("to see more details")
-        .attr("x", 40).attr("y", 150).attr("font-size","25px");
+        .attr("x", 40).attr("y", 150).attr("font-size", "25px");
       const format = d3.format(',d');
       function updateMouseover(d) {
         textbox.html('');
@@ -548,125 +568,125 @@
         let totalD = `${format(d['Total Doses Delivered'])}`
         let onepren = d['Percent of Total Pop with at least One Dose by State of Residence'];
         let twopren = d['Percent of Total Pop Fully Vaccinated by State of Residence'];
-        let oneprenText = `${format(d['Percent of Total Pop with at least One Dose by State of Residence'])}`+"%";
-        let twoprenText = `${format(d['Percent of Total Pop Fully Vaccinated by State of Residence'])}`+"%";
+        let oneprenText = `${format(d['Percent of Total Pop with at least One Dose by State of Residence'])}` + "%";
+        let twoprenText = `${format(d['Percent of Total Pop Fully Vaccinated by State of Residence'])}` + "%";
         //let maxWidth = Math.max(stringLen(stateName), stringLen(totalD), stringLen(onepren), stringLen(twopren))
         frame.attr("width", 300);
         var imgs = textbox.selectAll("image").data([0]);
         imgs.enter()
-            .append("svg:image")
-            .attr("class","question_mark")
-            .attr("xlink:href", "question-mark-icon.png")
-            .attr("x", "86")
-            .attr("y", "48")
-            .attr("width", "15")
-            .attr("height", "15");
+          .append("svg:image")
+          .attr("class", "question_mark")
+          .attr("xlink:href", "question-mark-icon.png")
+          .attr("x", "86")
+          .attr("y", "48")
+          .attr("width", "15")
+          .attr("height", "15");
         var rec_for_hhover = textbox.append("rect")
-          .attr("class","question_rec")
-          .attr("x",86)
+          .attr("class", "question_rec")
+          .attr("x", 86)
           .attr("y", 48)
           .attr("width", 15)
           .attr("height", 15)
-          .attr("visibility","hidden");
-        const question_hover = loli_hover.append("g").attr("class","mouseover")
-                                         .attr("transform", "translate(" + 40 + "," + 95 + ")");
-        const question_frame = question_hover.append("rect").attr("class","frame")
-                               .attr("x", 0).attr("y", 0)
-                               .attr("rx", 5).attr("ry", 5)
-                               .attr("fill","white")
-                               .attr("height", 210);
-        const question_explain = question_hover.append("g").attr("transform","translate(10,10)");
+          .attr("visibility", "hidden");
+        const question_hover = loli_hover.append("g").attr("class", "mouseover")
+          .attr("transform", "translate(" + 40 + "," + 95 + ")");
+        const question_frame = question_hover.append("rect").attr("class", "frame")
+          .attr("x", 0).attr("y", 0)
+          .attr("rx", 5).attr("ry", 5)
+          .attr("fill", "white")
+          .attr("height", 210);
+        const question_explain = question_hover.append("g").attr("transform", "translate(10,10)");
         function updateQuestion() {
           question_explain.html('');
-          question_frame.attr("width",260);
+          question_frame.attr("width", 260);
           question_explain.append("text").text("The Cook Partisan Voting Index")
-                 .attr("x", 0).attr("y", 10);
+            .attr("x", 0).attr("y", 10);
           question_explain.append("text").text("(abbreviated CPVI or PVI)")
-                 .attr("x", 0).attr("y", 30).attr("font-weight",900);
+            .attr("x", 0).attr("y", 30).attr("font-weight", 900);
           question_explain.append("text").text("United States congressional district")
-                 .attr("x", 0).attr("y", 80);
+            .attr("x", 0).attr("y", 80);
           question_explain.append("text").text("is a measurement of how strongly a")
-                 .attr("x", 0).attr("y", 60);
+            .attr("x", 0).attr("y", 60);
           question_explain.append("text").text("or state leans toward the Democratic")
-                 .attr("x", 0).attr("y", 100);
+            .attr("x", 0).attr("y", 100);
           question_explain.append("text").text(" or Republican Party, compared to the")
-                 .attr("x", 0).attr("y", 120);
+            .attr("x", 0).attr("y", 120);
           question_explain.append("text").text("nation as a whole, based on how that")
-                 .attr("x", 0).attr("y", 140);
+            .attr("x", 0).attr("y", 140);
           question_explain.append("text").text("district or state voted in the previous")
-                 .attr("x", 0).attr("y", 160);
+            .attr("x", 0).attr("y", 160);
           question_explain.append("text").text("two Presidential elections.")
-                 .attr("x", 0).attr("y", 180);
-                //  compared to the nation as a whole, based on how that district or state voted in the previous two Presidential elections
+            .attr("x", 0).attr("y", 180);
+          //  compared to the nation as a whole, based on how that district or state voted in the previous two Presidential elections
         }
-        rec_for_hhover.on("mouseover", function(d) {
-          question_hover.attr("visibility","");
+        rec_for_hhover.on("mouseover", function (d) {
+          question_hover.attr("visibility", "");
           updateQuestion()
         });
 
-        rec_for_hhover.on("mouseout", function() {
-          question_hover.attr("visibility","hidden");
+        rec_for_hhover.on("mouseout", function () {
+          question_hover.attr("visibility", "hidden");
         });
 
         textbox.append("text").text(stateName)
-          .attr("x", 0).attr("y", 20).attr("font-size","25px");
+          .attr("x", 0).attr("y", 20).attr("font-size", "25px");
         textbox.append("text").text(pvi)
           .attr("x", 0).attr("y", 60)
         textbox.append("text").text(pvires)
-          .attr("x", 150).attr("y", 58).attr("font-weight",900).attr("font-size","18px");
+          .attr("x", 150).attr("y", 58).attr("font-weight", 900).attr("font-size", "18px");
         textbox.append("text").text(vote)
           .attr("x", 0).attr("y", 83);
         textbox.append("text").text(voteres)
-           .attr("x", 150).attr("y", 81).attr("font-weight",900).attr("font-size","18px");
+          .attr("x", 150).attr("y", 81).attr("font-weight", 900).attr("font-size", "18px");
         textbox.append("text").text("Total Doess")
           .attr("x", 0).attr("y", 100);
-          textbox.append("text").text("Delivered")
-            .attr("x", 0).attr("y", 120);
+        textbox.append("text").text("Delivered")
+          .attr("x", 0).attr("y", 120);
         textbox.append("text").text(totalD)
-          .attr("x", 150).attr("y", 110).attr("font-weight",900).attr("font-size","18px");
+          .attr("x", 150).attr("y", 110).attr("font-weight", 900).attr("font-size", "18px");
         textbox.append("text").text("Precent of Pop by State of Resdidence")
           .attr("x", 0).attr("y", 140);
         textbox.append("rect")
           .attr("fill", "#FDE79A")
-          .attr("x",0)
+          .attr("x", 0)
           .attr("y", 150)
           .attr("width", 10)
           .attr("height", 10)
         textbox.append("rect")
           .attr("fill", "#FEC26D")
-          .attr("x",0)
+          .attr("x", 0)
           .attr("y", 170)
           .attr("width", 10)
           .attr("height", 10)
         textbox.append("text").text("At least one does")
-          .attr("x", 20).attr("y", 160).attr("font-size","12px");
+          .attr("x", 20).attr("y", 160).attr("font-size", "12px");
         textbox.append("text").text("Fully Vaccinated")
-          .attr("x", 20).attr("y", 180).attr("font-size","12px");
+          .attr("x", 20).attr("y", 180).attr("font-size", "12px");
         var twoPi = 2 * Math.PI,
-            formatPercent = d3.format(".0%");
+          formatPercent = d3.format(".0%");
         var arc = d3.arc()
-                    .startAngle(0)
-                    .innerRadius(0)
-                    .outerRadius(66);
+          .startAngle(0)
+          .innerRadius(0)
+          .outerRadius(66);
         var arc2 = d3.arc()
-                    .startAngle(2 * Math.PI*0.01)
-                    .innerRadius(0)
-                    .outerRadius(60);
+          .startAngle(2 * Math.PI * 0.01)
+          .innerRadius(0)
+          .outerRadius(60);
         var meter = textbox.append("g")
-                           .attr("transform", "translate(" + 130 + "," + 260 + ")");
+          .attr("transform", "translate(" + 130 + "," + 260 + ")");
         meter.append("path")
-            .attr("class", "pie-background")
-            .attr("d", arc.endAngle(twoPi));
+          .attr("class", "pie-background")
+          .attr("d", arc.endAngle(twoPi));
         var foreground = meter.append("path")
-            .attr("class", "foreground");
+          .attr("class", "foreground");
         var foreground2 = meter.append("path")
-            .attr("class", "foreground2");
-        foreground.attr("d", arc.endAngle(twoPi * ((onepren+0.01) / 100)));
-        foreground2.attr("d", arc2.endAngle(twoPi * ((twopren+0.01) / 100)));
+          .attr("class", "foreground2");
+        foreground.attr("d", arc.endAngle(twoPi * ((onepren + 0.01) / 100)));
+        foreground2.attr("d", arc2.endAngle(twoPi * ((twopren + 0.01) / 100)));
         textbox.append("text").text(oneprenText)
-          .attr("x", 200).attr("y", 270).attr("font-size","12px");
+          .attr("x", 200).attr("y", 270).attr("font-size", "12px");
         textbox.append("text").text(twoprenText)
-          .attr("x", 170).attr("y", 205).attr("font-size","12px");
+          .attr("x", 170).attr("y", 205).attr("font-size", "12px");
       }
       // Event handler 2: Update mouse over for map
       let tooltipWidth = 130;
@@ -989,7 +1009,7 @@
         if (option === "pviValue") {
           optionControl = "pviValue";
           // update legend
-          document.querySelector('div.legend2').innerText = "Cook Partisan Voting Index By State (same scale as above)";
+          document.querySelector('div.legend1').innerText = "Cook Partisan Voting Index By State (same scale as above)";
           d3.select("svg#map-legend-red").attr("visibility", "hidden");
           d3.select("svg#map-legend-blue").attr("visibility", "hidden");
           // update color
