@@ -198,8 +198,8 @@
 
   .container-float {
     position: relative;
-    width: 880px;
-    height: 330;
+    width: 1350px;
+    height: 350;
     background-color: white;
     margin: 0;
     margin: auto;
@@ -208,7 +208,7 @@
   .first {
     position: relative;
     height: 330;
-    width: 550;
+    width: 700;
     float: left;
     background-color: white;
   }
@@ -293,9 +293,9 @@
       </select>
     </div>
   </div>
-  <div class="container-float">
+  <div class="container-float relative">
     <div class="first">
-      <svg id="choropleth" height="300" width="550" style="background: #fff; margin-top:0px">
+      <svg id="choropleth" height="340" width="600" style="background: #fff;">
       </svg>
     </div>
 
@@ -315,8 +315,8 @@
   </div>
   <div class="relative" style="margin-top:10px; margin-bottom:20px;">
     <div class='legend-title legend2'>Precent of Total Pop with at least One Dose(%)</div>
-    <svg id="map-legend-blue" width="1000" height="50" style="background: #fff; margin-bottom:0px"></svg>
-    <svg id="map-legend-red" width="1000" height="50" style="background: #fff; margin-top:5px"></svg>
+    <svg id="map-legend-blue" width="1350" height="50" style="background: #fff; margin-bottom:0px"></svg>
+    <svg id="map-legend-red" width="1350" height="50" style="background: #fff; margin-top:5px"></svg>
   </div>
 
   <script>
@@ -519,16 +519,16 @@
       const blueLine = d3.select("svg#map-legend-blue").append("g")
         .attr("class", "legendLinear");
       const legendBlue = d3.legendColor()
-        .shapeWidth(100)
-        .cells(10)
+        .shapeWidth(175)
+        .cells(7)
         .orient('horizontal')
         .scale(blueScale);
       blueLine.call(legendBlue);
       const redLine = d3.select("svg#map-legend-red").append("g")
         .attr("class", "legendLinear");
       const legendRed = d3.legendColor()
-        .shapeWidth(100)
-        .cells(10)
+        .shapeWidth(175)
+        .cells(7)
         .orient('horizontal')
         .scale(redScale);
       redLine.call(legendRed);
